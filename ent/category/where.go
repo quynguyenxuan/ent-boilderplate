@@ -17,10 +17,10 @@
 package category
 
 import (
-	"entgo.io/contrib/entgql/internal/todo/ent/predicate"
-	"entgo.io/contrib/entgql/internal/todo/ent/schema/schematype"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"entgo.io/quynguyen-todo/ent/predicate"
+	"entgo.io/quynguyen-todo/ent/schema/schematype"
 )
 
 // ID filters vertices based on their ID field.

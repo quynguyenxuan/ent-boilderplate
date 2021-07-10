@@ -20,9 +20,9 @@ import (
 	"fmt"
 	"strings"
 
-	"entgo.io/contrib/entgql/internal/todo/ent/category"
-	"entgo.io/contrib/entgql/internal/todo/ent/schema/schematype"
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/quynguyen-todo/ent/category"
+	"entgo.io/quynguyen-todo/ent/schema/schematype"
 )
 
 // Category is the model entity for the Category schema.

@@ -20,11 +20,12 @@ import (
 	"errors"
 	"fmt"
 
-	"entgo.io/contrib/entgql/internal/todo/ent/category"
-	"entgo.io/contrib/entgql/internal/todo/ent/todo"
-	"entgo.io/contrib/entgql/internal/todo/ent/verysecret"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/quynguyen-todo/ent/category"
+	"entgo.io/quynguyen-todo/ent/product"
+	"entgo.io/quynguyen-todo/ent/todo"
+	"entgo.io/quynguyen-todo/ent/verysecret"
 )
 
 // ent aliases to avoid import conflicts in user's code.
@@ -46,6 +47,7 @@ type OrderFunc func(*sql.Selector)
 func columnChecker(table string) func(string) error {
 	checks := map[string]func(string) bool{
 		category.Table:   category.ValidColumn,
+		product.Table:    product.ValidColumn,
 		todo.Table:       todo.ValidColumn,
 		verysecret.Table: verysecret.ValidColumn,
 	}

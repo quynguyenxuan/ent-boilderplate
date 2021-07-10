@@ -20,11 +20,11 @@ import (
 	"context"
 	"fmt"
 
-	"entgo.io/contrib/entgql/internal/todo/ent/category"
-	"entgo.io/contrib/entgql/internal/todo/ent/predicate"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"entgo.io/quynguyen-todo/ent/category"
+	"entgo.io/quynguyen-todo/ent/predicate"
 )
 
 // CategoryDelete is the builder for deleting a Category entity.

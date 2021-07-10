@@ -15,8 +15,8 @@
 package schema
 
 import (
-	"entgo.io/contrib/entgql/internal/todo/ent/schema/schematype"
 	"entgo.io/ent/dialect"
+	"entgo.io/quynguyen-todo/ent/schema/schematype"
 
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"

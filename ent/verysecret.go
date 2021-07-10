@@ -20,8 +20,8 @@ import (
 	"fmt"
 	"strings"
 
-	"entgo.io/contrib/entgql/internal/todo/ent/verysecret"
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/quynguyen-todo/ent/verysecret"
 )
 
 // VerySecret is the model entity for the VerySecret schema.

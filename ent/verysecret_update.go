@@ -20,11 +20,11 @@ import (
 	"context"
 	"fmt"
 
-	"entgo.io/contrib/entgql/internal/todo/ent/predicate"
-	"entgo.io/contrib/entgql/internal/todo/ent/verysecret"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"entgo.io/quynguyen-todo/ent/predicate"
+	"entgo.io/quynguyen-todo/ent/verysecret"
 )
 
 // VerySecretUpdate is the builder for updating VerySecret entities.

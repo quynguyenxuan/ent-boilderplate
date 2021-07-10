@@ -14,11 +14,11 @@ resolver:
   dir: .
 
 autobind:
-  - entgo.io/contrib/entgql/internal/todo/ent
+  - entgo.io/quynguyen-todo/ent
   # Auto-bind the generated `Status` enum to GraphQL.
   
-  - entgo.io/contrib/entgql/internal/todo/ent/todo
-  - entgo.io/contrib/entgql/internal/todo/ent/product
+  - entgo.io/quynguyen-todo/ent/todo
+  - entgo.io/quynguyen-todo/ent/product
 
 models:
   ID:
@@ -26,17 +26,17 @@ models:
       - github.com/99designs/gqlgen/graphql.IntID
   Node:
     model:
-      - entgo.io/contrib/entgql/internal/todo/ent.Noder
+      - entgo.io/quynguyen-todo/ent.Noder
   # Custom mapping from GraphQL `CategoryStatus`
   # to the generated `category.Status` enum type.
   CategoryStatus:
     model:
-      - entgo.io/contrib/entgql/internal/todo/ent/category.Status
+      - entgo.io/quynguyen-todo/ent/category.Status
   # Custom mapping from GraphQL `CategoryConfig` and
   # `CategoryConfigInput` to `schematype.CategoryConfig`.
   CategoryConfig:
     model:
-      - entgo.io/contrib/entgql/internal/todo/ent/schema/schematype.CategoryConfig
+      - entgo.io/quynguyen-todo/ent/schema/schematype.CategoryConfig
   CategoryConfigInput:
     model:
-      - entgo.io/contrib/entgql/internal/todo/ent/schema/schematype.CategoryConfig
+      - entgo.io/quynguyen-todo/ent/schema/schematype.CategoryConfig

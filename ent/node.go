@@ -24,11 +24,12 @@ import (
 	"sync/atomic"
 
 	"entgo.io/contrib/entgql"
-	"entgo.io/contrib/entgql/internal/todo/ent/category"
-	"entgo.io/contrib/entgql/internal/todo/ent/todo"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/schema"
+	"entgo.io/quynguyen-todo/ent/category"
+	"entgo.io/quynguyen-todo/ent/product"
+	"entgo.io/quynguyen-todo/ent/todo"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/hashicorp/go-multierror"
 	"golang.org/x/sync/semaphore"
@@ -102,6 +103,16 @@ func (c *Category) Node(ctx context.Context) (node *Node, err error) {
 		Ints(ctx)
 	if err != nil {
 		return nil, err
+	}
+	return node, nil
+}
+
+func (pr *Product) Node(ctx context.Context) (node *Node, err error) {
+	node = &Node{
+		ID:     pr.ID,
+		Type:   "Product",
+		Fields: make([]*Field, 0),
+		Edges:  make([]*Edge, 0),
 	}
 	return node, nil
 }
@@ -263,6 +274,15 @@ func (c *Client) noder(ctx context.Context, table string, id int) (Noder, error)
 			return nil, err
 		}
 		return n, nil
+	case product.Table:
+		n, err := c.Product.Query().
+			Where(product.ID(id)).
+			CollectFields(ctx, "Product").
+			Only(ctx)
+		if err != nil {
+			return nil, err
+		}
+		return n, nil
 	case todo.Table:
 		n, err := c.Todo.Query().
 			Where(todo.ID(id)).
@@ -349,6 +369,19 @@ func (c *Client) noders(ctx context.Context, table string, ids []int) ([]Noder, 
 		nodes, err := c.Category.Query().
 			Where(category.IDIn(ids...)).
 			CollectFields(ctx, "Category").
+			All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case product.Table:
+		nodes, err := c.Product.Query().
+			Where(product.IDIn(ids...)).
+			CollectFields(ctx, "Product").
 			All(ctx)
 		if err != nil {
 			return nil, err

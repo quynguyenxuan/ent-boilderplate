@@ -21,10 +21,10 @@ import (
 	"strings"
 	"time"
 
-	"entgo.io/contrib/entgql/internal/todo/ent/category"
-	"entgo.io/contrib/entgql/internal/todo/ent/todo"
-	"entgo.io/contrib/entgql/internal/todo/ent/verysecret"
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/quynguyen-todo/ent/category"
+	"entgo.io/quynguyen-todo/ent/todo"
+	"entgo.io/quynguyen-todo/ent/verysecret"
 )
 
 // Todo is the model entity for the Todo schema.

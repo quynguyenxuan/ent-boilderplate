@@ -21,9 +21,9 @@ import (
 	"errors"
 	"fmt"
 
-	"entgo.io/contrib/entgql/internal/todo/ent/verysecret"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"entgo.io/quynguyen-todo/ent/verysecret"
 )
 
 // VerySecretCreate is the builder for creating a VerySecret entity.

@@ -20,10 +20,11 @@ import (
 	"fmt"
 	"time"
 
-	"entgo.io/contrib/entgql/internal/todo/ent/category"
-	"entgo.io/contrib/entgql/internal/todo/ent/predicate"
-	"entgo.io/contrib/entgql/internal/todo/ent/schema/schematype"
-	"entgo.io/contrib/entgql/internal/todo/ent/todo"
+	"entgo.io/quynguyen-todo/ent/category"
+	"entgo.io/quynguyen-todo/ent/predicate"
+	"entgo.io/quynguyen-todo/ent/product"
+	"entgo.io/quynguyen-todo/ent/schema/schematype"
+	"entgo.io/quynguyen-todo/ent/todo"
 )
 
 // CategoryWhereInput represents a where input for filtering Category queries.
@@ -231,11 +232,88 @@ func (i *CategoryWhereInput) P() (predicate.Category, error) {
 	}
 	switch len(predicates) {
 	case 0:
-		return nil, fmt.Errorf("entgo.io/contrib/entgql/internal/todo/ent: empty predicate CategoryWhereInput")
+		return nil, fmt.Errorf("entgo.io/quynguyen-todo/ent: empty predicate CategoryWhereInput")
 	case 1:
 		return predicates[0], nil
 	default:
 		return category.And(predicates...), nil
+	}
+}
+
+// ProductWhereInput represents a where input for filtering Product queries.
+type ProductWhereInput struct {
+	Not *ProductWhereInput   `json:"not,omitempty"`
+	Or  []*ProductWhereInput `json:"or,omitempty"`
+	And []*ProductWhereInput `json:"and,omitempty"`
+}
+
+// Filter applies the ProductWhereInput filter on the ProductQuery builder.
+func (i *ProductWhereInput) Filter(q *ProductQuery) (*ProductQuery, error) {
+	if i == nil {
+		return q, nil
+	}
+	p, err := i.P()
+	if err != nil {
+		return nil, err
+	}
+	return q.Where(p), nil
+}
+
+// P returns a predicate for filtering products.
+// An error is returned if the input is empty or invalid.
+func (i *ProductWhereInput) P() (predicate.Product, error) {
+	var predicates []predicate.Product
+	if i.Not != nil {
+		p, err := i.Not.P()
+		if err != nil {
+			return nil, err
+		}
+		predicates = append(predicates, product.Not(p))
+	}
+	switch n := len(i.Or); {
+	case n == 1:
+		p, err := i.Or[0].P()
+		if err != nil {
+			return nil, err
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		or := make([]predicate.Product, 0, n)
+		for _, w := range i.Or {
+			p, err := w.P()
+			if err != nil {
+				return nil, err
+			}
+			or = append(or, p)
+		}
+		predicates = append(predicates, product.Or(or...))
+	}
+	switch n := len(i.And); {
+	case n == 1:
+		p, err := i.And[0].P()
+		if err != nil {
+			return nil, err
+		}
+		predicates = append(predicates, p)
+	case n > 1:
+		and := make([]predicate.Product, 0, n)
+		for _, w := range i.And {
+			p, err := w.P()
+			if err != nil {
+				return nil, err
+			}
+			and = append(and, p)
+		}
+		predicates = append(predicates, product.And(and...))
+	}
+
+	switch len(predicates) {
+	case 0:
+		return nil, fmt.Errorf("entgo.io/quynguyen-todo/ent: empty predicate ProductWhereInput")
+	case 1:
+		return predicates[0], nil
+	default:
+		return product.And(predicates...), nil
 	}
 }
 
@@ -514,7 +592,7 @@ func (i *TodoWhereInput) P() (predicate.Todo, error) {
 	}
 	switch len(predicates) {
 	case 0:
-		return nil, fmt.Errorf("entgo.io/contrib/entgql/internal/todo/ent: empty predicate TodoWhereInput")
+		return nil, fmt.Errorf("entgo.io/quynguyen-todo/ent: empty predicate TodoWhereInput")
 	case 1:
 		return predicates[0], nil
 	default:

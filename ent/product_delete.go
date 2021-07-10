@@ -24,45 +24,45 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"entgo.io/quynguyen-todo/ent/predicate"
-	"entgo.io/quynguyen-todo/ent/verysecret"
+	"entgo.io/quynguyen-todo/ent/product"
 )
 
-// VerySecretDelete is the builder for deleting a VerySecret entity.
-type VerySecretDelete struct {
+// ProductDelete is the builder for deleting a Product entity.
+type ProductDelete struct {
 	config
 	hooks    []Hook
-	mutation *VerySecretMutation
+	mutation *ProductMutation
 }
 
-// Where adds a new predicate to the VerySecretDelete builder.
-func (vsd *VerySecretDelete) Where(ps ...predicate.VerySecret) *VerySecretDelete {
-	vsd.mutation.predicates = append(vsd.mutation.predicates, ps...)
-	return vsd
+// Where adds a new predicate to the ProductDelete builder.
+func (pd *ProductDelete) Where(ps ...predicate.Product) *ProductDelete {
+	pd.mutation.predicates = append(pd.mutation.predicates, ps...)
+	return pd
 }
 
 // Exec executes the deletion query and returns how many vertices were deleted.
-func (vsd *VerySecretDelete) Exec(ctx context.Context) (int, error) {
+func (pd *ProductDelete) Exec(ctx context.Context) (int, error) {
 	var (
 		err      error
 		affected int
 	)
-	if len(vsd.hooks) == 0 {
-		affected, err = vsd.sqlExec(ctx)
+	if len(pd.hooks) == 0 {
+		affected, err = pd.sqlExec(ctx)
 	} else {
 		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
-			mutation, ok := m.(*VerySecretMutation)
+			mutation, ok := m.(*ProductMutation)
 			if !ok {
 				return nil, fmt.Errorf("unexpected mutation type %T", m)
 			}
-			vsd.mutation = mutation
-			affected, err = vsd.sqlExec(ctx)
+			pd.mutation = mutation
+			affected, err = pd.sqlExec(ctx)
 			mutation.done = true
 			return affected, err
 		})
-		for i := len(vsd.hooks) - 1; i >= 0; i-- {
-			mut = vsd.hooks[i](mut)
+		for i := len(pd.hooks) - 1; i >= 0; i-- {
+			mut = pd.hooks[i](mut)
 		}
-		if _, err := mut.Mutate(ctx, vsd.mutation); err != nil {
+		if _, err := mut.Mutate(ctx, pd.mutation); err != nil {
 			return 0, err
 		}
 	}
@@ -70,53 +70,53 @@ func (vsd *VerySecretDelete) Exec(ctx context.Context) (int, error) {
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (vsd *VerySecretDelete) ExecX(ctx context.Context) int {
-	n, err := vsd.Exec(ctx)
+func (pd *ProductDelete) ExecX(ctx context.Context) int {
+	n, err := pd.Exec(ctx)
 	if err != nil {
 		panic(err)
 	}
 	return n
 }
 
-func (vsd *VerySecretDelete) sqlExec(ctx context.Context) (int, error) {
+func (pd *ProductDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := &sqlgraph.DeleteSpec{
 		Node: &sqlgraph.NodeSpec{
-			Table: verysecret.Table,
+			Table: product.Table,
 			ID: &sqlgraph.FieldSpec{
 				Type:   field.TypeInt,
-				Column: verysecret.FieldID,
+				Column: product.FieldID,
 			},
 		},
 	}
-	if ps := vsd.mutation.predicates; len(ps) > 0 {
+	if ps := pd.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
 				ps[i](selector)
 			}
 		}
 	}
-	return sqlgraph.DeleteNodes(ctx, vsd.driver, _spec)
+	return sqlgraph.DeleteNodes(ctx, pd.driver, _spec)
 }
 
-// VerySecretDeleteOne is the builder for deleting a single VerySecret entity.
-type VerySecretDeleteOne struct {
-	vsd *VerySecretDelete
+// ProductDeleteOne is the builder for deleting a single Product entity.
+type ProductDeleteOne struct {
+	pd *ProductDelete
 }
 
 // Exec executes the deletion query.
-func (vsdo *VerySecretDeleteOne) Exec(ctx context.Context) error {
-	n, err := vsdo.vsd.Exec(ctx)
+func (pdo *ProductDeleteOne) Exec(ctx context.Context) error {
+	n, err := pdo.pd.Exec(ctx)
 	switch {
 	case err != nil:
 		return err
 	case n == 0:
-		return &NotFoundError{verysecret.Label}
+		return &NotFoundError{product.Label}
 	default:
 		return nil
 	}
 }
 
 // ExecX is like Exec, but panics if an error occurs.
-func (vsdo *VerySecretDeleteOne) ExecX(ctx context.Context) {
-	vsdo.vsd.ExecX(ctx)
+func (pdo *ProductDeleteOne) ExecX(ctx context.Context) {
+	pdo.pd.ExecX(ctx)
 }

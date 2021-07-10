@@ -6,24 +6,9 @@ import (
 	"fmt"
 	"io"
 	"strconv"
-	"time"
 
-	"entgo.io/contrib/entgql/internal/todo/ent"
-	"entgo.io/contrib/entgql/internal/todo/ent/todo"
+	"entgo.io/quynguyen-todo/ent/todo"
 )
-
-type Product struct {
-	ID        int              `json:"id"`
-	CreatedAt *time.Time       `json:"createdAt"`
-	Status    ProductStatus    `json:"status"`
-	Priority  int              `json:"priority"`
-	Text      string           `json:"text"`
-	Parent    *Product         `json:"parent"`
-	Children  []*Product       `json:"children"`
-	Category  *ProductCategory `json:"category"`
-}
-
-func (Product) IsNode() {}
 
 type ProductCategory struct {
 	ID   int    `json:"id"`
@@ -31,17 +16,6 @@ type ProductCategory struct {
 }
 
 func (ProductCategory) IsNode() {}
-
-type ProductConnection struct {
-	TotalCount int            `json:"totalCount"`
-	PageInfo   *ent.PageInfo  `json:"pageInfo"`
-	Edges      []*ProductEdge `json:"edges"`
-}
-
-type ProductEdge struct {
-	Node   *Product   `json:"node"`
-	Cursor ent.Cursor `json:"cursor"`
-}
 
 type ProductInput struct {
 	Status     ProductStatus `json:"status"`
@@ -51,73 +25,12 @@ type ProductInput struct {
 	CategoryID *int          `json:"category_id"`
 }
 
-type ProductMutation struct {
-	CreateProduct *Product `json:"createProduct"`
-	ClearProducts int      `json:"clearProducts"`
-}
-
-type ProductOrder struct {
-	Direction ent.OrderDirection `json:"direction"`
-	Field     *ProductOrderField `json:"field"`
-}
-
-type ProductQuery struct {
-	Node     ent.Noder          `json:"node"`
-	Nodes    []ent.Noder        `json:"nodes"`
-	Products *ProductConnection `json:"products"`
-}
-
 type TodoInput struct {
 	Status     todo.Status `json:"status"`
 	Priority   *int        `json:"priority"`
 	Text       string      `json:"text"`
 	Parent     *int        `json:"parent"`
 	CategoryID *int        `json:"category_id"`
-}
-
-type ProductOrderField string
-
-const (
-	ProductOrderFieldCreatedAt ProductOrderField = "CREATED_AT"
-	ProductOrderFieldPriority  ProductOrderField = "PRIORITY"
-	ProductOrderFieldStatus    ProductOrderField = "STATUS"
-	ProductOrderFieldText      ProductOrderField = "TEXT"
-)
-
-var AllProductOrderField = []ProductOrderField{
-	ProductOrderFieldCreatedAt,
-	ProductOrderFieldPriority,
-	ProductOrderFieldStatus,
-	ProductOrderFieldText,
-}
-
-func (e ProductOrderField) IsValid() bool {
-	switch e {
-	case ProductOrderFieldCreatedAt, ProductOrderFieldPriority, ProductOrderFieldStatus, ProductOrderFieldText:
-		return true
-	}
-	return false
-}
-
-func (e ProductOrderField) String() string {
-	return string(e)
-}
-
-func (e *ProductOrderField) UnmarshalGQL(v interface{}) error {
-	str, ok := v.(string)
-	if !ok {
-		return fmt.Errorf("enums must be strings")
-	}
-
-	*e = ProductOrderField(str)
-	if !e.IsValid() {
-		return fmt.Errorf("%s is not a valid ProductOrderField", str)
-	}
-	return nil
-}
-
-func (e ProductOrderField) MarshalGQL(w io.Writer) {
-	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 type ProductStatus string

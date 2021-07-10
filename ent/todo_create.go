@@ -22,11 +22,11 @@ import (
 	"fmt"
 	"time"
 
-	"entgo.io/contrib/entgql/internal/todo/ent/category"
-	"entgo.io/contrib/entgql/internal/todo/ent/todo"
-	"entgo.io/contrib/entgql/internal/todo/ent/verysecret"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"entgo.io/quynguyen-todo/ent/category"
+	"entgo.io/quynguyen-todo/ent/todo"
+	"entgo.io/quynguyen-todo/ent/verysecret"
 )
 
 // TodoCreate is the builder for creating a Todo entity.
