@@ -9,22 +9,13 @@ type Product implements Node {
   status: ProductStatus!
   priority: Int!
   text: String!
-  parent: Product
-  children: [Product!]
-  # category: ProductCategory
 }
 
-# type ProductCategory implements Node {
-#   id: ID!
-#   text: String!
-# }
 
 input ProductInput {
   status: ProductStatus! = DRAFT
   priority: Int
   text: String!
-  parent: ID
-  category_id: ID
 }
 
 type ProductConnection {
@@ -38,19 +29,15 @@ type ProductEdge {
   cursor: Cursor!
 }
 
-# enum ProductOrderField {
-#   # CREATED_AT
-#   # PRIORITY
-#   STATUS
-#   # TEXT
-# }
-
-enum ProductOrderDirection {
-  ASC
-  DESC
+enum ProductOrderField {
+  CREATED_AT
+  PRIORITY
+  STATUS
+  TEXT
 }
 
+
 input ProductOrder {
-  direction: ProductOrderDirection!
-  field: TodoOrderField
+  direction: OrderDirection!
+  field: ProductOrderField
 }

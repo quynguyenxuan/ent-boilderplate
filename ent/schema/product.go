@@ -19,7 +19,6 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
-	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 )
 
@@ -55,22 +54,10 @@ func (Product) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("TEXT"),
 			),
-		field.Bytes("blob").Optional(),
 	}
 }
 
 // Edges of the Product.
 func (Product) Edges() []ent.Edge {
-	return []ent.Edge{
-		edge.To("children", Todo.Type).
-			Annotations(entgql.Bind()).
-			From("parent").
-			Annotations(entgql.Bind()).
-			Unique(),
-		edge.From("category", Category.Type).
-			Ref("todos").
-			Unique(),
-		edge.To("secret", VerySecret.Type).
-			Unique(),
-	}
+	return nil
 }

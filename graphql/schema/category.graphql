@@ -1,0 +1,20 @@
+
+
+type CategoryConfig {
+  maxMembers: Int
+}
+
+input CategoryConfigInput {
+  maxMembers: Int
+}
+
+enum CategoryStatus {
+  ENABLED
+  DISABLED
+}
+
+type Category implements Node {
+  id: ID!
+  text: String!
+}
+

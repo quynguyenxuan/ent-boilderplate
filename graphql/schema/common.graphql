@@ -22,7 +22,7 @@ type Query {
   node(id: ID!): Node
   nodes(ids: [ID!]!): [Node]!
   todos(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: TodoOrder, where: TodoWhereInput): TodoConnection
-  # products(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: ProductOrder): ProductConnection
+  products(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: ProductOrder, where: ProductWhereInput): ProductConnection
 }
 
 type Mutation {
@@ -31,4 +31,3 @@ type Mutation {
   createProduct(Product: ProductInput!): Product!
   clearProducts: Int!
 }
-# , where: ProductWhereInput

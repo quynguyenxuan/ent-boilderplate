@@ -18,7 +18,9 @@ import (
 	"net/http"
 
 	"entgo.io/contrib/entgql"
-	todo "entgo.io/quynguyen-todo"
+	todo "entgo.io/quynguyen-todo/graphql"
+
+	// "entgo.io/quynguyen-todo"
 	"entgo.io/quynguyen-todo/ent"
 	"entgo.io/quynguyen-todo/ent/migrate"
 	"github.com/99designs/gqlgen/graphql/handler"
