@@ -16,6 +16,13 @@
 
 package product
 
+import (
+	"fmt"
+	"io"
+	"strconv"
+	"time"
+)
+
 const (
 	// Label holds the string label denoting the product type in the database.
 	Label = "product"
@@ -23,11 +30,46 @@ const (
 	FieldID = "id"
 	// Table holds the table name of the product in the database.
 	Table = "products"
+
+	FieldCreatedAt = "created_at"
+	// FieldStatus holds the string denoting the status field in the database.
+	FieldStatus = "status"
+	// FieldPriority holds the string denoting the priority field in the database.
+	FieldPriority = "priority"
+	// FieldText holds the string denoting the text field in the database.
+	FieldText = "text"
+	// FieldBlob holds the
 )
 
 // Columns holds all SQL columns for product fields.
 var Columns = []string{
 	FieldID,
+	FieldCreatedAt,
+	FieldStatus,
+	FieldPriority,
+	FieldText,
+}
+
+var (
+	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
+	DefaultCreatedAt func() time.Time
+	// DefaultPriority holds the default value on creation for the "priority" field.
+	DefaultPriority int
+	// TextValidator is a validator for the "text" field. It is called by the builders before save.
+	TextValidator func(string) error
+)
+
+// Status defines the type for the "status" enum field.
+type Status string
+
+// Status values.
+const (
+	StatusDraft   Status = "DRAFT"
+	StatusActived Status = "ACTIVED"
+)
+
+func (s Status) String() string {
+	return string(s)
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -38,4 +80,32 @@ func ValidColumn(column string) bool {
 		}
 	}
 	return false
+}
+
+// StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
+func StatusValidator(s Status) error {
+	switch s {
+	case StatusDraft, StatusActived:
+		return nil
+	default:
+		return fmt.Errorf("todo: invalid enum value for status field: %q", s)
+	}
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (s Status) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(s.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (s *Status) UnmarshalGQL(val interface{}) error {
+	str, ok := val.(string)
+	if !ok {
+		return fmt.Errorf("enum %T must be a string", val)
+	}
+	*s = Status(str)
+	if err := StatusValidator(*s); err != nil {
+		return fmt.Errorf("%s is not a valid Status", str)
+	}
+	return nil
 }

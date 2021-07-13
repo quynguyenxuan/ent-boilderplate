@@ -1,0 +1,34 @@
+enum OrderDirection {
+  ASC
+  DESC
+}
+
+interface Node {
+  id: ID!
+}
+
+scalar Time
+
+scalar Cursor
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: Cursor
+  endCursor: Cursor
+}
+
+type Query {
+  node(id: ID!): Node
+  nodes(ids: [ID!]!): [Node]!
+  todos(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: TodoOrder, where: TodoWhereInput): TodoConnection
+  # products(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: ProductOrder): ProductConnection
+}
+
+type Mutation {
+  createTodo(todo: TodoInput!): Todo!
+  clearTodos: Int!
+  createProduct(Product: ProductInput!): Product!
+  clearProducts: Int!
+}
+# , where: ProductWhereInput

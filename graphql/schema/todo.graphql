@@ -64,14 +64,3 @@ input TodoOrder {
   direction: OrderDirection!
   field: TodoOrderField
 }
-
-type TodoQuery {
-  node(id: ID!): Node
-  nodes(ids: [ID!]!): [Node]!
-  todos(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: TodoOrder, where: TodoWhereInput): TodoConnection
-}
-
-type TodoMutation {
-  createTodo(todo: TodoInput!): Todo!
-  clearTodos: Int!
-}

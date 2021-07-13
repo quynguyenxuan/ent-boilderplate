@@ -1,0 +1,56 @@
+enum ProductStatus {
+  DRAFT
+  ACTIVED
+}
+
+type Product implements Node {
+  id: ID!
+  createdAt: Time
+  status: ProductStatus!
+  priority: Int!
+  text: String!
+  parent: Product
+  children: [Product!]
+  # category: ProductCategory
+}
+
+# type ProductCategory implements Node {
+#   id: ID!
+#   text: String!
+# }
+
+input ProductInput {
+  status: ProductStatus! = DRAFT
+  priority: Int
+  text: String!
+  parent: ID
+  category_id: ID
+}
+
+type ProductConnection {
+  totalCount: Int!
+  pageInfo: PageInfo!
+  edges: [ProductEdge]
+}
+
+type ProductEdge {
+  node: Product
+  cursor: Cursor!
+}
+
+# enum ProductOrderField {
+#   # CREATED_AT
+#   # PRIORITY
+#   STATUS
+#   # TEXT
+# }
+
+enum ProductOrderDirection {
+  ASC
+  DESC
+}
+
+input ProductOrder {
+  direction: ProductOrderDirection!
+  field: TodoOrderField
+}
