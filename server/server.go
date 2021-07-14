@@ -15,21 +15,25 @@ package main
 
 import (
 	"context"
-	"net/http"
 
-	"entgo.io/contrib/entgql"
 	todo "entgo.io/quynguyen-todo/graphql"
 
 	// "entgo.io/quynguyen-todo"
+	"entgo.io/contrib/entgql"
 	"entgo.io/quynguyen-todo/ent"
 	"entgo.io/quynguyen-todo/ent/migrate"
+
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/debug"
+
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/alecthomas/kong"
 	"go.uber.org/zap"
 
 	_ "entgo.io/quynguyen-todo/ent/runtime"
+	"github.com/valyala/fasthttp/fasthttpadaptor"
+
+	"github.com/gofiber/fiber/v2"
 	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -65,14 +69,34 @@ func main() {
 	if cli.Debug {
 		srv.Use(&debug.Tracer{})
 	}
+	app := fiber.New()
 
-	http.Handle("/",
-		playground.Handler("Todo", "/query"),
-	)
-	http.Handle("/query", srv)
+	app.All("/query", func(c *fiber.Ctx) error {
+		// var r http.Request
+		ctx := c.Context()
+
+		fasthttpH := fasthttpadaptor.NewFastHTTPHandlerFunc(srv.ServeHTTP)
+		fasthttpH(ctx)
+		return nil
+	})
+
+	app.All("/", func(c *fiber.Ctx) error {
+		ctx := c.Context()
+		fasthttpH := fasthttpadaptor.NewFastHTTPHandlerFunc(playground.Handler("Todo", "/query"))
+		fasthttpH(ctx)
+		return nil
+	})
+
+	app.Listen(cli.Addr)
+
+	// http.Handle("/",
+	// 	playground.Handler("Todo", "/query"),
+	// )
+	// http.Handle("/query", srv)
+
+	// if err := http.ListenAndServe(cli.Addr, nil); err != nil {
+	// 	log.Error("http server terminated", zap.Error(err))
+	// }
 
 	log.Info("listening on", zap.String("address", cli.Addr))
-	if err := http.ListenAndServe(cli.Addr, nil); err != nil {
-		log.Error("http server terminated", zap.Error(err))
-	}
 }
