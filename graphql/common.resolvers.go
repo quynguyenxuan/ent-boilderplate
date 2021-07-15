@@ -19,10 +19,11 @@ package graphql
 
 import (
 	"context"
-	"fmt"
+	// "fmt"
 	"time"
 
 	"entgo.io/quynguyen-todo/ent"
+	"entgo.io/quynguyen-todo/ent/todo"
 )
 
 func (r *mutationResolver) CreateTodo(ctx context.Context, todo TodoInput) (*ent.Todo, error) {
@@ -47,6 +48,7 @@ func (r *mutationResolver) ClearTodos(ctx context.Context) (int, error) {
 
 func (r *mutationResolver) CreateProduct(ctx context.Context, product ProductInput) (*ent.Product, error) {
 	client := ent.FromContext(ctx)
+	client.Todo.Create().SetStatus(todo.StatusCompleted).SetText(product.Text).SetNillablePriority(product.Priority).SetCreatedAt(time.Now()).Save(ctx)
 	return client.Product.
 		Create().
 		SetStatus(product.Status).
@@ -58,7 +60,9 @@ func (r *mutationResolver) CreateProduct(ctx context.Context, product ProductInp
 }
 
 func (r *mutationResolver) ClearProducts(ctx context.Context) (int, error) {
-	panic(fmt.Errorf("not implemented"))
+	client := ent.FromContext(ctx)
+	return client.Product.Delete().Exec(ctx)
+	// panic(fmt.Errorf("not implemented"))
 }
 
 func (r *queryResolver) Node(ctx context.Context, id int) (ent.Noder, error) {
