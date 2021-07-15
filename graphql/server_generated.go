@@ -194,7 +194,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateProduct(childComplexity, args["Product"].(ProductInput)), true
+		return e.complexity.Mutation.CreateProduct(childComplexity, args["product"].(ProductInput)), true
 
 	case "Mutation.createTodo":
 		if e.complexity.Mutation.CreateTodo == nil {
@@ -560,7 +560,7 @@ type Query {
 type Mutation {
   createTodo(todo: TodoInput!): Todo!
   clearTodos: Int!
-  createProduct(Product: ProductInput!): Product!
+  createProduct(product: ProductInput!): Product!
   clearProducts: Int!
 }`, BuiltIn: false},
 	{Name: "graphql/schema/ent.graphql", Input: `"""
@@ -824,14 +824,14 @@ func (ec *executionContext) field_Mutation_createProduct_args(ctx context.Contex
 	var err error
 	args := map[string]interface{}{}
 	var arg0 ProductInput
-	if tmp, ok := rawArgs["Product"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("Product"))
+	if tmp, ok := rawArgs["product"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("product"))
 		arg0, err = ec.unmarshalNProductInput2entgoᚗioᚋquynguyenᚑtodoᚋgraphqlᚐProductInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["Product"] = arg0
+	args["product"] = arg0
 	return args, nil
 }
 
@@ -1257,7 +1257,7 @@ func (ec *executionContext) _Mutation_createProduct(ctx context.Context, field g
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateProduct(rctx, args["Product"].(ProductInput))
+		return ec.resolvers.Mutation().CreateProduct(rctx, args["product"].(ProductInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
