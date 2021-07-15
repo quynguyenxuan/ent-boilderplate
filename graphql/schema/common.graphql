@@ -28,6 +28,6 @@ type Query {
 type Mutation {
   createTodo(todo: TodoInput!): Todo!
   clearTodos: Int!
-  createProduct(Product: ProductInput!): Product!
+  createProduct(product: ProductInput!): Product!
   clearProducts: Int!
 }

@@ -20,20 +20,41 @@ package graphql
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"entgo.io/quynguyen-todo/ent"
 )
 
 func (r *mutationResolver) CreateTodo(ctx context.Context, todo TodoInput) (*ent.Todo, error) {
-	panic(fmt.Errorf("not implemented"))
+	client := ent.FromContext(ctx)
+	return client.Todo.
+		Create().
+		SetStatus(todo.Status).
+		SetNillablePriority(todo.Priority).
+		SetText(todo.Text).
+		SetNillableParentID(todo.Parent).
+		Save(ctx)
+	// panic(fmt.Err?orf("not implemented"))
 }
 
 func (r *mutationResolver) ClearTodos(ctx context.Context) (int, error) {
-	panic(fmt.Errorf("not implemented"))
+	client := ent.FromContext(ctx)
+	return client.Todo.
+		Delete().
+		Exec(ctx)
+	// panic(fmt.Errorf("not implemented"))
 }
 
 func (r *mutationResolver) CreateProduct(ctx context.Context, product ProductInput) (*ent.Product, error) {
-	panic(fmt.Errorf("not implemented"))
+	client := ent.FromContext(ctx)
+	return client.Product.
+		Create().
+		SetStatus(product.Status).
+		SetNillablePriority(product.Priority).
+		SetText(product.Text).
+		SetCreatedAt(time.Now()).
+		Save(ctx)
+	// panic(fmt.Errorf("not implemented"))
 }
 
 func (r *mutationResolver) ClearProducts(ctx context.Context) (int, error) {
@@ -41,19 +62,32 @@ func (r *mutationResolver) ClearProducts(ctx context.Context) (int, error) {
 }
 
 func (r *queryResolver) Node(ctx context.Context, id int) (ent.Noder, error) {
-	panic(fmt.Errorf("not implemented"))
+	return r.client.Noder(ctx, id)
+	// panic(fmt.Errorf("not implemented"))
 }
 
 func (r *queryResolver) Nodes(ctx context.Context, ids []int) ([]ent.Noder, error) {
-	panic(fmt.Errorf("not implemented"))
+	return r.client.Noders(ctx, ids)
+
+	// panic(fmt.Errorf("not implemented"))
 }
 
 func (r *queryResolver) Todos(ctx context.Context, after *ent.Cursor, first *int, before *ent.Cursor, last *int, orderBy *ent.TodoOrder, where *ent.TodoWhereInput) (*ent.TodoConnection, error) {
-	panic(fmt.Errorf("not implemented"))
+	return r.client.Todo.Query().
+		Paginate(ctx, after, first, before, last,
+			ent.WithTodoOrder(orderBy),
+			ent.WithTodoFilter(where.Filter),
+		)
+	// panic(fmt.Errorf("not implemented"))
 }
 
 func (r *queryResolver) Products(ctx context.Context, after *ent.Cursor, first *int, before *ent.Cursor, last *int, orderBy *ent.ProductOrder, where *ent.ProductWhereInput) (*ent.ProductConnection, error) {
-	panic(fmt.Errorf("not implemented"))
+	return r.client.Product.Query().
+		Paginate(ctx, after, first, before, last,
+			ent.WithProductOrder(orderBy),
+			ent.WithProductFilter(where.Filter),
+		)
+	// panic(fmt.Errorf("not implemented"))
 }
 
 // Mutation returns MutationResolver implementation.

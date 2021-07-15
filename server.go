@@ -15,6 +15,7 @@ package main
 
 import (
 	"context"
+	// "net/http"
 
 	todo "entgo.io/quynguyen-todo/graphql"
 
@@ -52,6 +53,7 @@ func main() {
 	// )
 	client, err := ent.Open(
 		"sqlite3",
+		// "file:ent?mode=memory&cache=shared&_fk=1",
 		"file:sqlite.db?cache=shared&_fk=1",
 	)
 	if err != nil {
