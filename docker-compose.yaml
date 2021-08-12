@@ -1,0 +1,14 @@
+version: "3.6"
+services:
+  quynguyen-todo:
+    build:
+      context: . 
+      dockerfile: Dockerfile
+      target: quynguyen/air
+    image: quynguyen/air:latest
+    working_dir: /go/src/entgo.io/quynguyen-todo
+    volumes:
+      - ./:/go/src/entgo.io/quynguyen-todo
+    ports:
+      - 8081:8081
+    # command: air

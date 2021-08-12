@@ -6,3 +6,5 @@ serve-hotreload:
 	air
 serve:
 	go run server.go
+docker:
+	dockdocker-compose up -d
