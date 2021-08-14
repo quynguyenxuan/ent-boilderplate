@@ -27,6 +27,13 @@ type Product struct {
 	ent.Schema
 }
 
+//Anotations of the product.
+// func (Product) Annotations() []schema.Annotation {
+// 	return []schema.Annotation{
+// 		entsql.Annotation{Table: "Products"},
+// 	}
+// }
+
 // Fields of the Product.
 func (Product) Fields() []ent.Field {
 	return []ent.Field{

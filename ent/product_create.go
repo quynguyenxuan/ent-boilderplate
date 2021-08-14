@@ -109,6 +109,9 @@ func (pc *ProductCreate) Save(ctx context.Context) (*Product, error) {
 			return node, err
 		})
 		for i := len(pc.hooks) - 1; i >= 0; i-- {
+			if pc.hooks[i] == nil {
+				return nil, fmt.Errorf("ent: uninitialized hook (forgotten import ent/runtime?)")
+			}
 			mut = pc.hooks[i](mut)
 		}
 		if _, err := mut.Mutate(ctx, pc.mutation); err != nil {
@@ -127,6 +130,19 @@ func (pc *ProductCreate) SaveX(ctx context.Context) *Product {
 	return v
 }
 
+// Exec executes the query.
+func (pc *ProductCreate) Exec(ctx context.Context) error {
+	_, err := pc.Save(ctx)
+	return err
+}
+
+// ExecX is like Exec, but panics if an error occurs.
+func (pc *ProductCreate) ExecX(ctx context.Context) {
+	if err := pc.Exec(ctx); err != nil {
+		panic(err)
+	}
+}
+
 // defaults sets the default values of the builder before save.
 func (pc *ProductCreate) defaults() {
 	if _, ok := pc.mutation.CreatedAt(); !ok {
@@ -142,25 +158,25 @@ func (pc *ProductCreate) defaults() {
 // check runs all checks and user-defined validators on the builder.
 func (pc *ProductCreate) check() error {
 	if _, ok := pc.mutation.CreatedAt(); !ok {
-		return &ValidationError{Name: "created_at", err: errors.New("ent: missing required field \"created_at\"")}
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "created_at"`)}
 	}
 	if _, ok := pc.mutation.Status(); !ok {
-		return &ValidationError{Name: "status", err: errors.New("ent: missing required field \"status\"")}
+		return &ValidationError{Name: "status", err: errors.New(`ent: missing required field "status"`)}
 	}
 	if v, ok := pc.mutation.Status(); ok {
 		if err := product.StatusValidator(v); err != nil {
-			return &ValidationError{Name: "status", err: fmt.Errorf("ent: validator failed for field \"status\": %w", err)}
+			return &ValidationError{Name: "status", err: fmt.Errorf(`ent: validator failed for field "status": %w`, err)}
 		}
 	}
 	if _, ok := pc.mutation.Priority(); !ok {
-		return &ValidationError{Name: "priority", err: errors.New("ent: missing required field \"priority\"")}
+		return &ValidationError{Name: "priority", err: errors.New(`ent: missing required field "priority"`)}
 	}
 	if _, ok := pc.mutation.Text(); !ok {
-		return &ValidationError{Name: "text", err: errors.New("ent: missing required field \"text\"")}
+		return &ValidationError{Name: "text", err: errors.New(`ent: missing required field "text"`)}
 	}
 	if v, ok := pc.mutation.Text(); ok {
 		if err := product.TextValidator(v); err != nil {
-			return &ValidationError{Name: "text", err: fmt.Errorf("ent: validator failed for field \"text\": %w", err)}
+			return &ValidationError{Name: "text", err: fmt.Errorf(`ent: validator failed for field "text": %w`, err)}
 		}
 	}
 	return nil
@@ -254,8 +270,9 @@ func (pcb *ProductCreateBulk) Save(ctx context.Context) ([]*Product, error) {
 				if i < len(mutators)-1 {
 					_, err = mutators[i+1].Mutate(root, pcb.builders[i+1].mutation)
 				} else {
+					spec := &sqlgraph.BatchCreateSpec{Nodes: specs}
 					// Invoke the actual operation on the latest mutation in the chain.
-					if err = sqlgraph.BatchCreate(ctx, pcb.driver, &sqlgraph.BatchCreateSpec{Nodes: specs}); err != nil {
+					if err = sqlgraph.BatchCreate(ctx, pcb.driver, spec); err != nil {
 						if sqlgraph.IsConstraintError(err) {
 							err = &ConstraintError{err.Error(), err}
 						}
@@ -266,8 +283,10 @@ func (pcb *ProductCreateBulk) Save(ctx context.Context) ([]*Product, error) {
 				}
 				mutation.id = &nodes[i].ID
 				mutation.done = true
-				id := specs[i].ID.Value.(int64)
-				nodes[i].ID = int(id)
+				if specs[i].ID.Value != nil {
+					id := specs[i].ID.Value.(int64)
+					nodes[i].ID = int(id)
+				}
 				return nodes[i], nil
 			})
 			for i := len(builder.hooks) - 1; i >= 0; i-- {
@@ -291,4 +310,17 @@ func (pcb *ProductCreateBulk) SaveX(ctx context.Context) []*Product {
 		panic(err)
 	}
 	return v
+}
+
+// Exec executes the query.
+func (pcb *ProductCreateBulk) Exec(ctx context.Context) error {
+	_, err := pcb.Save(ctx)
+	return err
+}
+
+// ExecX is like Exec, but panics if an error occurs.
+func (pcb *ProductCreateBulk) ExecX(ctx context.Context) {
+	if err := pcb.Exec(ctx); err != nil {
+		panic(err)
+	}
 }

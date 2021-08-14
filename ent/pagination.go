@@ -30,7 +30,7 @@ import (
 	"entgo.io/quynguyen-todo/ent/product"
 	"entgo.io/quynguyen-todo/ent/todo"
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/99designs/gqlgen/graphql/errcode"
+	"github.com/arsmn/fastgql/graphql/errcode"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 	"github.com/vmihailenco/msgpack/v5"
 )

@@ -301,8 +301,8 @@ func (pq *ProductQuery) GroupBy(field string, fields ...string) *ProductGroupBy 
 //		Select(product.FieldCreatedAt).
 //		Scan(ctx, &v)
 //
-func (pq *ProductQuery) Select(field string, fields ...string) *ProductSelect {
-	pq.fields = append([]string{field}, fields...)
+func (pq *ProductQuery) Select(fields ...string) *ProductSelect {
+	pq.fields = append(pq.fields, fields...)
 	return &ProductSelect{ProductQuery: pq}
 }
 
