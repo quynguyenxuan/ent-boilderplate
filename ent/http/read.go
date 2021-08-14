@@ -25,23 +25,23 @@ import (
 	"entgo.io/quynguyen-todo/ent/product"
 	"entgo.io/quynguyen-todo/ent/todo"
 	"entgo.io/quynguyen-todo/ent/verysecret"
-	"github.com/go-chi/chi/v5"
-	"github.com/mailru/easyjson"
-	"github.com/masseelch/render"
+	"github.com/gofiber/fiber/v2"
+	"github.com/valyala/fasthttp/fasthttpadaptor"
 	"go.uber.org/zap"
 )
 
 // Read fetches the ent.Category identified by a given url-parameter from the
 // database and renders it to the client.
-func (h *CategoryHandler) Read(w http.ResponseWriter, r *http.Request) {
+func (h *CategoryHandler) Read(c *fiber.Ctx) error {
 	l := h.log.With(zap.String("method", "Read"))
 	// ID is URL parameter.
-	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		l.Error("error getting id from url parameter", zap.String("id", chi.URLParam(r, "id")), zap.Error(err))
-		render.BadRequest(w, r, "id must be an integer greater zero")
-		return
+		l.Error("error getting id from url parameter", zap.String("id", c.Params("id")), zap.Error(err))
+		return c.Status(400).SendString("id must be an integer greater zero")
 	}
+	var r http.Request
+	fasthttpadaptor.ConvertRequest(c.Context(), &r, true)
 	// Create the query to fetch the Category
 	q := h.client.Category.Query().Where(category.ID(id))
 	e, err := q.Only(r.Context())
@@ -50,32 +50,33 @@ func (h *CategoryHandler) Read(w http.ResponseWriter, r *http.Request) {
 		case ent.IsNotFound(err):
 			msg := stripEntError(err)
 			l.Info(msg, zap.Error(err), zap.Int("id", id))
-			render.NotFound(w, r, msg)
+			c.Status(404).SendString(msg)
 		case ent.IsNotSingular(err):
 			msg := stripEntError(err)
 			l.Error(msg, zap.Error(err), zap.Int("id", id))
-			render.BadRequest(w, r, msg)
+			c.Status(400).SendString(msg)
 		default:
 			l.Error("could not read category", zap.Error(err), zap.Int("id", id))
-			render.InternalServerError(w, r, nil)
+			c.Status(fiber.StatusInternalServerError).SendString("Serve Error")
 		}
-		return
+		return nil
 	}
 	l.Info("category rendered", zap.Int("id", id))
-	easyjson.MarshalToHTTPResponseWriter(NewCategory656363463View(e), w)
+	return c.JSON(NewCategory656363463View(e))
 }
 
 // Read fetches the ent.Product identified by a given url-parameter from the
 // database and renders it to the client.
-func (h *ProductHandler) Read(w http.ResponseWriter, r *http.Request) {
+func (h *ProductHandler) Read(c *fiber.Ctx) error {
 	l := h.log.With(zap.String("method", "Read"))
 	// ID is URL parameter.
-	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		l.Error("error getting id from url parameter", zap.String("id", chi.URLParam(r, "id")), zap.Error(err))
-		render.BadRequest(w, r, "id must be an integer greater zero")
-		return
+		l.Error("error getting id from url parameter", zap.String("id", c.Params("id")), zap.Error(err))
+		return c.Status(400).SendString("id must be an integer greater zero")
 	}
+	var r http.Request
+	fasthttpadaptor.ConvertRequest(c.Context(), &r, true)
 	// Create the query to fetch the Product
 	q := h.client.Product.Query().Where(product.ID(id))
 	e, err := q.Only(r.Context())
@@ -84,32 +85,33 @@ func (h *ProductHandler) Read(w http.ResponseWriter, r *http.Request) {
 		case ent.IsNotFound(err):
 			msg := stripEntError(err)
 			l.Info(msg, zap.Error(err), zap.Int("id", id))
-			render.NotFound(w, r, msg)
+			c.Status(404).SendString(msg)
 		case ent.IsNotSingular(err):
 			msg := stripEntError(err)
 			l.Error(msg, zap.Error(err), zap.Int("id", id))
-			render.BadRequest(w, r, msg)
+			c.Status(400).SendString(msg)
 		default:
 			l.Error("could not read product", zap.Error(err), zap.Int("id", id))
-			render.InternalServerError(w, r, nil)
+			c.Status(fiber.StatusInternalServerError).SendString("Serve Error")
 		}
-		return
+		return nil
 	}
 	l.Info("product rendered", zap.Int("id", id))
-	easyjson.MarshalToHTTPResponseWriter(NewProduct1899176864View(e), w)
+	return c.JSON(NewProduct1899176864View(e))
 }
 
 // Read fetches the ent.Todo identified by a given url-parameter from the
 // database and renders it to the client.
-func (h *TodoHandler) Read(w http.ResponseWriter, r *http.Request) {
+func (h *TodoHandler) Read(c *fiber.Ctx) error {
 	l := h.log.With(zap.String("method", "Read"))
 	// ID is URL parameter.
-	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		l.Error("error getting id from url parameter", zap.String("id", chi.URLParam(r, "id")), zap.Error(err))
-		render.BadRequest(w, r, "id must be an integer greater zero")
-		return
+		l.Error("error getting id from url parameter", zap.String("id", c.Params("id")), zap.Error(err))
+		return c.Status(400).SendString("id must be an integer greater zero")
 	}
+	var r http.Request
+	fasthttpadaptor.ConvertRequest(c.Context(), &r, true)
 	// Create the query to fetch the Todo
 	q := h.client.Todo.Query().Where(todo.ID(id))
 	e, err := q.Only(r.Context())
@@ -118,32 +120,33 @@ func (h *TodoHandler) Read(w http.ResponseWriter, r *http.Request) {
 		case ent.IsNotFound(err):
 			msg := stripEntError(err)
 			l.Info(msg, zap.Error(err), zap.Int("id", id))
-			render.NotFound(w, r, msg)
+			c.Status(404).SendString(msg)
 		case ent.IsNotSingular(err):
 			msg := stripEntError(err)
 			l.Error(msg, zap.Error(err), zap.Int("id", id))
-			render.BadRequest(w, r, msg)
+			c.Status(400).SendString(msg)
 		default:
 			l.Error("could not read todo", zap.Error(err), zap.Int("id", id))
-			render.InternalServerError(w, r, nil)
+			c.Status(fiber.StatusInternalServerError).SendString("Serve Error")
 		}
-		return
+		return nil
 	}
 	l.Info("todo rendered", zap.Int("id", id))
-	easyjson.MarshalToHTTPResponseWriter(NewTodo2548332322View(e), w)
+	return c.JSON(NewTodo2548332322View(e))
 }
 
 // Read fetches the ent.VerySecret identified by a given url-parameter from the
 // database and renders it to the client.
-func (h *VerySecretHandler) Read(w http.ResponseWriter, r *http.Request) {
+func (h *VerySecretHandler) Read(c *fiber.Ctx) error {
 	l := h.log.With(zap.String("method", "Read"))
 	// ID is URL parameter.
-	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		l.Error("error getting id from url parameter", zap.String("id", chi.URLParam(r, "id")), zap.Error(err))
-		render.BadRequest(w, r, "id must be an integer greater zero")
-		return
+		l.Error("error getting id from url parameter", zap.String("id", c.Params("id")), zap.Error(err))
+		return c.Status(400).SendString("id must be an integer greater zero")
 	}
+	var r http.Request
+	fasthttpadaptor.ConvertRequest(c.Context(), &r, true)
 	// Create the query to fetch the VerySecret
 	q := h.client.VerySecret.Query().Where(verysecret.ID(id))
 	e, err := q.Only(r.Context())
@@ -152,17 +155,17 @@ func (h *VerySecretHandler) Read(w http.ResponseWriter, r *http.Request) {
 		case ent.IsNotFound(err):
 			msg := stripEntError(err)
 			l.Info(msg, zap.Error(err), zap.Int("id", id))
-			render.NotFound(w, r, msg)
+			c.Status(404).SendString(msg)
 		case ent.IsNotSingular(err):
 			msg := stripEntError(err)
 			l.Error(msg, zap.Error(err), zap.Int("id", id))
-			render.BadRequest(w, r, msg)
+			c.Status(400).SendString(msg)
 		default:
 			l.Error("could not read very-secret", zap.Error(err), zap.Int("id", id))
-			render.InternalServerError(w, r, nil)
+			c.Status(fiber.StatusInternalServerError).SendString("Serve Error")
 		}
-		return
+		return nil
 	}
 	l.Info("very-secret rendered", zap.Int("id", id))
-	easyjson.MarshalToHTTPResponseWriter(NewVerySecret1653553545View(e), w)
+	return c.JSON(NewVerySecret1653553545View(e))
 }

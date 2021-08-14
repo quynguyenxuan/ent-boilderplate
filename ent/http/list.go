@@ -20,143 +20,139 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/mailru/easyjson"
-	"github.com/masseelch/render"
+	"github.com/gofiber/fiber/v2"
+	"github.com/valyala/fasthttp/fasthttpadaptor"
 	"go.uber.org/zap"
 )
 
 // Read fetches the ent.Category identified by a given url-parameter from the
 // database and returns it to the client.
-func (h *CategoryHandler) List(w http.ResponseWriter, r *http.Request) {
+func (h *CategoryHandler) List(c *fiber.Ctx) error {
 	l := h.log.With(zap.String("method", "List"))
 	q := h.client.Category.Query()
+	var r http.Request
+	fasthttpadaptor.ConvertRequest(c.Context(), &r, true)
 	var err error
 	page := 1
-	if d := r.URL.Query().Get("page"); d != "" {
+	if d := c.Query("page"); d != "" {
 		page, err = strconv.Atoi(d)
 		if err != nil {
 			l.Info("error parsing query parameter 'page'", zap.String("page", d), zap.Error(err))
-			render.BadRequest(w, r, "page must be an integer greater zero")
-			return
+			return c.Status(400).SendString("page must be an integer greater zero")
 		}
 	}
 	itemsPerPage := 30
-	if d := r.URL.Query().Get("itemsPerPage"); d != "" {
+	if d := c.Query("itemsPerPage"); d != "" {
 		itemsPerPage, err = strconv.Atoi(d)
 		if err != nil {
 			l.Info("error parsing query parameter 'itemsPerPage'", zap.String("itemsPerPage", d), zap.Error(err))
-			render.BadRequest(w, r, "itemsPerPage must be an integer greater zero")
-			return
+			return c.Status(400).SendString("itemsPerPage must be an integer greater zero")
 		}
 	}
 	es, err := q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage).All(r.Context())
 	if err != nil {
 		l.Error("error fetching categories from db", zap.Error(err))
-		render.InternalServerError(w, r, nil)
-		return
+		return c.Status(fiber.StatusInternalServerError).SendString("Serve Error")
 	}
 	l.Info("categories rendered", zap.Int("amount", len(es)))
-	easyjson.MarshalToHTTPResponseWriter(NewCategory656363463Views(es), w)
+	return c.JSON(NewCategory656363463Views(es))
 }
 
 // Read fetches the ent.Product identified by a given url-parameter from the
 // database and returns it to the client.
-func (h *ProductHandler) List(w http.ResponseWriter, r *http.Request) {
+func (h *ProductHandler) List(c *fiber.Ctx) error {
 	l := h.log.With(zap.String("method", "List"))
 	q := h.client.Product.Query()
+	var r http.Request
+	fasthttpadaptor.ConvertRequest(c.Context(), &r, true)
 	var err error
 	page := 1
-	if d := r.URL.Query().Get("page"); d != "" {
+	if d := c.Query("page"); d != "" {
 		page, err = strconv.Atoi(d)
 		if err != nil {
 			l.Info("error parsing query parameter 'page'", zap.String("page", d), zap.Error(err))
-			render.BadRequest(w, r, "page must be an integer greater zero")
-			return
+			return c.Status(400).SendString("page must be an integer greater zero")
 		}
 	}
 	itemsPerPage := 30
-	if d := r.URL.Query().Get("itemsPerPage"); d != "" {
+	if d := c.Query("itemsPerPage"); d != "" {
 		itemsPerPage, err = strconv.Atoi(d)
 		if err != nil {
 			l.Info("error parsing query parameter 'itemsPerPage'", zap.String("itemsPerPage", d), zap.Error(err))
-			render.BadRequest(w, r, "itemsPerPage must be an integer greater zero")
-			return
+			return c.Status(400).SendString("itemsPerPage must be an integer greater zero")
 		}
 	}
 	es, err := q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage).All(r.Context())
 	if err != nil {
 		l.Error("error fetching products from db", zap.Error(err))
-		render.InternalServerError(w, r, nil)
-		return
+		return c.Status(fiber.StatusInternalServerError).SendString("Serve Error")
 	}
 	l.Info("products rendered", zap.Int("amount", len(es)))
-	easyjson.MarshalToHTTPResponseWriter(NewProduct1899176864Views(es), w)
+	return c.JSON(NewProduct1899176864Views(es))
 }
 
 // Read fetches the ent.Todo identified by a given url-parameter from the
 // database and returns it to the client.
-func (h *TodoHandler) List(w http.ResponseWriter, r *http.Request) {
+func (h *TodoHandler) List(c *fiber.Ctx) error {
 	l := h.log.With(zap.String("method", "List"))
 	q := h.client.Todo.Query()
+	var r http.Request
+	fasthttpadaptor.ConvertRequest(c.Context(), &r, true)
 	var err error
 	page := 1
-	if d := r.URL.Query().Get("page"); d != "" {
+	if d := c.Query("page"); d != "" {
 		page, err = strconv.Atoi(d)
 		if err != nil {
 			l.Info("error parsing query parameter 'page'", zap.String("page", d), zap.Error(err))
-			render.BadRequest(w, r, "page must be an integer greater zero")
-			return
+			return c.Status(400).SendString("page must be an integer greater zero")
 		}
 	}
 	itemsPerPage := 30
-	if d := r.URL.Query().Get("itemsPerPage"); d != "" {
+	if d := c.Query("itemsPerPage"); d != "" {
 		itemsPerPage, err = strconv.Atoi(d)
 		if err != nil {
 			l.Info("error parsing query parameter 'itemsPerPage'", zap.String("itemsPerPage", d), zap.Error(err))
-			render.BadRequest(w, r, "itemsPerPage must be an integer greater zero")
-			return
+			return c.Status(400).SendString("itemsPerPage must be an integer greater zero")
 		}
 	}
 	es, err := q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage).All(r.Context())
 	if err != nil {
 		l.Error("error fetching todos from db", zap.Error(err))
-		render.InternalServerError(w, r, nil)
-		return
+		return c.Status(fiber.StatusInternalServerError).SendString("Serve Error")
 	}
 	l.Info("todos rendered", zap.Int("amount", len(es)))
-	easyjson.MarshalToHTTPResponseWriter(NewTodo2548332322Views(es), w)
+	return c.JSON(NewTodo2548332322Views(es))
 }
 
 // Read fetches the ent.VerySecret identified by a given url-parameter from the
 // database and returns it to the client.
-func (h *VerySecretHandler) List(w http.ResponseWriter, r *http.Request) {
+func (h *VerySecretHandler) List(c *fiber.Ctx) error {
 	l := h.log.With(zap.String("method", "List"))
 	q := h.client.VerySecret.Query()
+	var r http.Request
+	fasthttpadaptor.ConvertRequest(c.Context(), &r, true)
 	var err error
 	page := 1
-	if d := r.URL.Query().Get("page"); d != "" {
+	if d := c.Query("page"); d != "" {
 		page, err = strconv.Atoi(d)
 		if err != nil {
 			l.Info("error parsing query parameter 'page'", zap.String("page", d), zap.Error(err))
-			render.BadRequest(w, r, "page must be an integer greater zero")
-			return
+			return c.Status(400).SendString("page must be an integer greater zero")
 		}
 	}
 	itemsPerPage := 30
-	if d := r.URL.Query().Get("itemsPerPage"); d != "" {
+	if d := c.Query("itemsPerPage"); d != "" {
 		itemsPerPage, err = strconv.Atoi(d)
 		if err != nil {
 			l.Info("error parsing query parameter 'itemsPerPage'", zap.String("itemsPerPage", d), zap.Error(err))
-			render.BadRequest(w, r, "itemsPerPage must be an integer greater zero")
-			return
+			return c.Status(400).SendString("itemsPerPage must be an integer greater zero")
 		}
 	}
 	es, err := q.Limit(itemsPerPage).Offset((page - 1) * itemsPerPage).All(r.Context())
 	if err != nil {
 		l.Error("error fetching very-secrets from db", zap.Error(err))
-		render.InternalServerError(w, r, nil)
-		return
+		return c.Status(fiber.StatusInternalServerError).SendString("Serve Error")
 	}
 	l.Info("very-secrets rendered", zap.Int("amount", len(es)))
-	easyjson.MarshalToHTTPResponseWriter(NewVerySecret1653553545Views(es), w)
+	return c.JSON(NewVerySecret1653553545Views(es))
 }

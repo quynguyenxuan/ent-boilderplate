@@ -25,28 +25,28 @@ import (
 	"entgo.io/quynguyen-todo/ent/product"
 	"entgo.io/quynguyen-todo/ent/todo"
 	"entgo.io/quynguyen-todo/ent/verysecret"
-	"github.com/go-chi/chi/v5"
-	"github.com/mailru/easyjson"
-	"github.com/masseelch/render"
+	"github.com/gofiber/fiber/v2"
+	"github.com/valyala/fasthttp/fasthttpadaptor"
 	"go.uber.org/zap"
 )
 
 // Update updates a given ent.Category and saves the changes to the database.
-func (h CategoryHandler) Update(w http.ResponseWriter, r *http.Request) {
+func (h CategoryHandler) Update(c *fiber.Ctx) error {
 	l := h.log.With(zap.String("method", "Update"))
 	// ID is URL parameter.
-	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		l.Error("error getting id from url parameter", zap.String("id", chi.URLParam(r, "id")), zap.Error(err))
-		render.BadRequest(w, r, "id must be an integer greater zero")
-		return
+		l.Error("error getting id from url parameter", zap.String("id", c.Params("id")), zap.Error(err))
+		return c.Status(400).SendString("id must be an integer greater zero")
 	}
 	// Get the post data.
-	var d CategoryUpdateRequest
-	if err := easyjson.UnmarshalFromReader(r.Body, &d); err != nil {
+	d := new(CategoryUpdateRequest)
+	var r http.Request
+	fasthttpadaptor.ConvertRequest(c.Context(), &r, true)
+
+	if err := c.BodyParser(d); err != nil {
 		l.Error("error decoding json", zap.Error(err))
-		render.BadRequest(w, r, "invalid json string")
-		return
+		return c.Status(400).SendString("invalid json string")
 	}
 	// Validate the data.
 	errs := make(map[string]string)
@@ -62,8 +62,8 @@ func (h CategoryHandler) Update(w http.ResponseWriter, r *http.Request) {
 	}
 	if len(errs) > 0 {
 		l.Info("validation failed", zapFields(errs)...)
-		render.BadRequest(w, r, errs)
-		return
+		return c.Status(400).JSON(errs)
+
 	}
 	// Save the data.
 	b := h.client.Category.UpdateOneID(id)
@@ -86,16 +86,16 @@ func (h CategoryHandler) Update(w http.ResponseWriter, r *http.Request) {
 		case ent.IsNotFound(err):
 			msg := stripEntError(err)
 			l.Info(msg, zap.Error(err), zap.Int("id", id))
-			render.NotFound(w, r, msg)
+			c.Status(404).SendString(msg)
 		case ent.IsNotSingular(err):
 			msg := stripEntError(err)
 			l.Error(msg, zap.Error(err), zap.Int("id", id))
-			render.BadRequest(w, r, msg)
+			c.Status(400).SendString(msg)
 		default:
 			l.Error("could-not-update-category", zap.Error(err), zap.Int("id", id))
-			render.InternalServerError(w, r, nil)
+			c.Status(fiber.StatusInternalServerError).SendString("Serve Error")
 		}
-		return
+		return nil
 	}
 	// Reload entry.
 	q := h.client.Category.Query().Where(category.ID(e.ID))
@@ -105,37 +105,38 @@ func (h CategoryHandler) Update(w http.ResponseWriter, r *http.Request) {
 		case ent.IsNotFound(err):
 			msg := stripEntError(err)
 			l.Info(msg, zap.Error(err), zap.Int("id", id))
-			render.NotFound(w, r, msg)
+			c.Status(404).SendString(msg)
 		case ent.IsNotSingular(err):
 			msg := stripEntError(err)
 			l.Error(msg, zap.Error(err), zap.Int("id", id))
-			render.BadRequest(w, r, msg)
+			c.Status(400).SendString(msg)
 		default:
 			l.Error("could-not-read-category", zap.Error(err), zap.Int("id", id))
-			render.InternalServerError(w, r, nil)
+			c.Status(fiber.StatusInternalServerError).SendString("Serve Error")
 		}
-		return
+		return nil
 	}
 	l.Info("category rendered", zap.Int("id", e.ID))
-	easyjson.MarshalToHTTPResponseWriter(NewCategory656363463View(e), w)
+	return c.JSON(NewCategory656363463View(e))
 }
 
 // Update updates a given ent.Product and saves the changes to the database.
-func (h ProductHandler) Update(w http.ResponseWriter, r *http.Request) {
+func (h ProductHandler) Update(c *fiber.Ctx) error {
 	l := h.log.With(zap.String("method", "Update"))
 	// ID is URL parameter.
-	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		l.Error("error getting id from url parameter", zap.String("id", chi.URLParam(r, "id")), zap.Error(err))
-		render.BadRequest(w, r, "id must be an integer greater zero")
-		return
+		l.Error("error getting id from url parameter", zap.String("id", c.Params("id")), zap.Error(err))
+		return c.Status(400).SendString("id must be an integer greater zero")
 	}
 	// Get the post data.
-	var d ProductUpdateRequest
-	if err := easyjson.UnmarshalFromReader(r.Body, &d); err != nil {
+	d := new(ProductUpdateRequest)
+	var r http.Request
+	fasthttpadaptor.ConvertRequest(c.Context(), &r, true)
+
+	if err := c.BodyParser(d); err != nil {
 		l.Error("error decoding json", zap.Error(err))
-		render.BadRequest(w, r, "invalid json string")
-		return
+		return c.Status(400).SendString("invalid json string")
 	}
 	// Validate the data.
 	errs := make(map[string]string)
@@ -157,8 +158,8 @@ func (h ProductHandler) Update(w http.ResponseWriter, r *http.Request) {
 	}
 	if len(errs) > 0 {
 		l.Info("validation failed", zapFields(errs)...)
-		render.BadRequest(w, r, errs)
-		return
+		return c.Status(400).JSON(errs)
+
 	}
 	// Save the data.
 	b := h.client.Product.UpdateOneID(id)
@@ -178,16 +179,16 @@ func (h ProductHandler) Update(w http.ResponseWriter, r *http.Request) {
 		case ent.IsNotFound(err):
 			msg := stripEntError(err)
 			l.Info(msg, zap.Error(err), zap.Int("id", id))
-			render.NotFound(w, r, msg)
+			c.Status(404).SendString(msg)
 		case ent.IsNotSingular(err):
 			msg := stripEntError(err)
 			l.Error(msg, zap.Error(err), zap.Int("id", id))
-			render.BadRequest(w, r, msg)
+			c.Status(400).SendString(msg)
 		default:
 			l.Error("could-not-update-product", zap.Error(err), zap.Int("id", id))
-			render.InternalServerError(w, r, nil)
+			c.Status(fiber.StatusInternalServerError).SendString("Serve Error")
 		}
-		return
+		return nil
 	}
 	// Reload entry.
 	q := h.client.Product.Query().Where(product.ID(e.ID))
@@ -197,37 +198,38 @@ func (h ProductHandler) Update(w http.ResponseWriter, r *http.Request) {
 		case ent.IsNotFound(err):
 			msg := stripEntError(err)
 			l.Info(msg, zap.Error(err), zap.Int("id", id))
-			render.NotFound(w, r, msg)
+			c.Status(404).SendString(msg)
 		case ent.IsNotSingular(err):
 			msg := stripEntError(err)
 			l.Error(msg, zap.Error(err), zap.Int("id", id))
-			render.BadRequest(w, r, msg)
+			c.Status(400).SendString(msg)
 		default:
 			l.Error("could-not-read-product", zap.Error(err), zap.Int("id", id))
-			render.InternalServerError(w, r, nil)
+			c.Status(fiber.StatusInternalServerError).SendString("Serve Error")
 		}
-		return
+		return nil
 	}
 	l.Info("product rendered", zap.Int("id", e.ID))
-	easyjson.MarshalToHTTPResponseWriter(NewProduct1899176864View(e), w)
+	return c.JSON(NewProduct1899176864View(e))
 }
 
 // Update updates a given ent.Todo and saves the changes to the database.
-func (h TodoHandler) Update(w http.ResponseWriter, r *http.Request) {
+func (h TodoHandler) Update(c *fiber.Ctx) error {
 	l := h.log.With(zap.String("method", "Update"))
 	// ID is URL parameter.
-	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		l.Error("error getting id from url parameter", zap.String("id", chi.URLParam(r, "id")), zap.Error(err))
-		render.BadRequest(w, r, "id must be an integer greater zero")
-		return
+		l.Error("error getting id from url parameter", zap.String("id", c.Params("id")), zap.Error(err))
+		return c.Status(400).SendString("id must be an integer greater zero")
 	}
 	// Get the post data.
-	var d TodoUpdateRequest
-	if err := easyjson.UnmarshalFromReader(r.Body, &d); err != nil {
+	d := new(TodoUpdateRequest)
+	var r http.Request
+	fasthttpadaptor.ConvertRequest(c.Context(), &r, true)
+
+	if err := c.BodyParser(d); err != nil {
 		l.Error("error decoding json", zap.Error(err))
-		render.BadRequest(w, r, "invalid json string")
-		return
+		return c.Status(400).SendString("invalid json string")
 	}
 	// Validate the data.
 	errs := make(map[string]string)
@@ -249,8 +251,8 @@ func (h TodoHandler) Update(w http.ResponseWriter, r *http.Request) {
 	}
 	if len(errs) > 0 {
 		l.Info("validation failed", zapFields(errs)...)
-		render.BadRequest(w, r, errs)
-		return
+		return c.Status(400).JSON(errs)
+
 	}
 	// Save the data.
 	b := h.client.Todo.UpdateOneID(id)
@@ -288,16 +290,16 @@ func (h TodoHandler) Update(w http.ResponseWriter, r *http.Request) {
 		case ent.IsNotFound(err):
 			msg := stripEntError(err)
 			l.Info(msg, zap.Error(err), zap.Int("id", id))
-			render.NotFound(w, r, msg)
+			c.Status(404).SendString(msg)
 		case ent.IsNotSingular(err):
 			msg := stripEntError(err)
 			l.Error(msg, zap.Error(err), zap.Int("id", id))
-			render.BadRequest(w, r, msg)
+			c.Status(400).SendString(msg)
 		default:
 			l.Error("could-not-update-todo", zap.Error(err), zap.Int("id", id))
-			render.InternalServerError(w, r, nil)
+			c.Status(fiber.StatusInternalServerError).SendString("Serve Error")
 		}
-		return
+		return nil
 	}
 	// Reload entry.
 	q := h.client.Todo.Query().Where(todo.ID(e.ID))
@@ -307,37 +309,38 @@ func (h TodoHandler) Update(w http.ResponseWriter, r *http.Request) {
 		case ent.IsNotFound(err):
 			msg := stripEntError(err)
 			l.Info(msg, zap.Error(err), zap.Int("id", id))
-			render.NotFound(w, r, msg)
+			c.Status(404).SendString(msg)
 		case ent.IsNotSingular(err):
 			msg := stripEntError(err)
 			l.Error(msg, zap.Error(err), zap.Int("id", id))
-			render.BadRequest(w, r, msg)
+			c.Status(400).SendString(msg)
 		default:
 			l.Error("could-not-read-todo", zap.Error(err), zap.Int("id", id))
-			render.InternalServerError(w, r, nil)
+			c.Status(fiber.StatusInternalServerError).SendString("Serve Error")
 		}
-		return
+		return nil
 	}
 	l.Info("todo rendered", zap.Int("id", e.ID))
-	easyjson.MarshalToHTTPResponseWriter(NewTodo2548332322View(e), w)
+	return c.JSON(NewTodo2548332322View(e))
 }
 
 // Update updates a given ent.VerySecret and saves the changes to the database.
-func (h VerySecretHandler) Update(w http.ResponseWriter, r *http.Request) {
+func (h VerySecretHandler) Update(c *fiber.Ctx) error {
 	l := h.log.With(zap.String("method", "Update"))
 	// ID is URL parameter.
-	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
-		l.Error("error getting id from url parameter", zap.String("id", chi.URLParam(r, "id")), zap.Error(err))
-		render.BadRequest(w, r, "id must be an integer greater zero")
-		return
+		l.Error("error getting id from url parameter", zap.String("id", c.Params("id")), zap.Error(err))
+		return c.Status(400).SendString("id must be an integer greater zero")
 	}
 	// Get the post data.
-	var d VerySecretUpdateRequest
-	if err := easyjson.UnmarshalFromReader(r.Body, &d); err != nil {
+	d := new(VerySecretUpdateRequest)
+	var r http.Request
+	fasthttpadaptor.ConvertRequest(c.Context(), &r, true)
+
+	if err := c.BodyParser(d); err != nil {
 		l.Error("error decoding json", zap.Error(err))
-		render.BadRequest(w, r, "invalid json string")
-		return
+		return c.Status(400).SendString("invalid json string")
 	}
 	// Save the data.
 	b := h.client.VerySecret.UpdateOneID(id)
@@ -351,16 +354,16 @@ func (h VerySecretHandler) Update(w http.ResponseWriter, r *http.Request) {
 		case ent.IsNotFound(err):
 			msg := stripEntError(err)
 			l.Info(msg, zap.Error(err), zap.Int("id", id))
-			render.NotFound(w, r, msg)
+			c.Status(404).SendString(msg)
 		case ent.IsNotSingular(err):
 			msg := stripEntError(err)
 			l.Error(msg, zap.Error(err), zap.Int("id", id))
-			render.BadRequest(w, r, msg)
+			c.Status(400).SendString(msg)
 		default:
 			l.Error("could-not-update-very-secret", zap.Error(err), zap.Int("id", id))
-			render.InternalServerError(w, r, nil)
+			c.Status(fiber.StatusInternalServerError).SendString("Serve Error")
 		}
-		return
+		return nil
 	}
 	// Reload entry.
 	q := h.client.VerySecret.Query().Where(verysecret.ID(e.ID))
@@ -370,17 +373,17 @@ func (h VerySecretHandler) Update(w http.ResponseWriter, r *http.Request) {
 		case ent.IsNotFound(err):
 			msg := stripEntError(err)
 			l.Info(msg, zap.Error(err), zap.Int("id", id))
-			render.NotFound(w, r, msg)
+			c.Status(404).SendString(msg)
 		case ent.IsNotSingular(err):
 			msg := stripEntError(err)
 			l.Error(msg, zap.Error(err), zap.Int("id", id))
-			render.BadRequest(w, r, msg)
+			c.Status(400).SendString(msg)
 		default:
 			l.Error("could-not-read-very-secret", zap.Error(err), zap.Int("id", id))
-			render.InternalServerError(w, r, nil)
+			c.Status(fiber.StatusInternalServerError).SendString("Serve Error")
 		}
-		return
+		return nil
 	}
 	l.Info("very-secret rendered", zap.Int("id", e.ID))
-	easyjson.MarshalToHTTPResponseWriter(NewVerySecret1653553545View(e), w)
+	return c.JSON(NewVerySecret1653553545View(e))
 }

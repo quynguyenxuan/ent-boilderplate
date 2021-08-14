@@ -17,12 +17,10 @@
 package http
 
 import (
-	"net/http"
 	"strings"
 
 	"entgo.io/quynguyen-todo/ent"
 	"github.com/gofiber/fiber/v2"
-	"github.com/valyala/fasthttp/fasthttpadaptor"
 	"go.uber.org/zap"
 )
 
@@ -33,15 +31,6 @@ type handler struct{}
 type Routes uint32
 
 func (rs Routes) has(r Routes) bool { return rs&r != 0 }
-
-func FastHttpHandler(h http.HandlerFunc) fiber.Handler {
-	return func(c *fiber.Ctx) error {
-		ctx := c.Context()
-		fasthttpH := fasthttpadaptor.NewFastHTTPHandlerFunc(h)
-		fasthttpH(ctx)
-		return nil
-	}
-}
 
 const (
 	CategoryCreate Routes = 1 << iota
@@ -71,22 +60,22 @@ func NewCategoryHandler(c *ent.Client, l *zap.Logger) *CategoryHandler {
 // RegisterHandlers registers the generated handlers on the given chi router.
 func (h *CategoryHandler) Mount(r fiber.Router, rs Routes) {
 	if rs.has(CategoryCreate) {
-		r.Post("/", FastHttpHandler(h.Create))
+		r.Post("/", h.Create)
 	}
 	if rs.has(CategoryRead) {
-		r.Get("/{id}", FastHttpHandler(h.Read))
+		r.Get("/:id", h.Read)
 	}
 	if rs.has(CategoryUpdate) {
-		r.Patch("/{id}", FastHttpHandler(h.Update))
+		r.Patch("/id", h.Update)
 	}
 	if rs.has(CategoryDelete) {
-		r.Delete("/{id}", FastHttpHandler(h.Delete))
+		r.Delete("/id", h.Delete)
 	}
 	if rs.has(CategoryList) {
-		r.Get("/", FastHttpHandler(h.List))
+		r.Get("/", h.List)
 	}
 	if rs.has(CategoryTodos) {
-		r.Get("/{id}/todos", FastHttpHandler(h.Todos))
+		r.Get("/:id/todos", h.Todos)
 	}
 }
 
@@ -117,19 +106,19 @@ func NewProductHandler(c *ent.Client, l *zap.Logger) *ProductHandler {
 // RegisterHandlers registers the generated handlers on the given chi router.
 func (h *ProductHandler) Mount(r fiber.Router, rs Routes) {
 	if rs.has(ProductCreate) {
-		r.Post("/", FastHttpHandler(h.Create))
+		r.Post("/", h.Create)
 	}
 	if rs.has(ProductRead) {
-		r.Get("/{id}", FastHttpHandler(h.Read))
+		r.Get("/:id", h.Read)
 	}
 	if rs.has(ProductUpdate) {
-		r.Patch("/{id}", FastHttpHandler(h.Update))
+		r.Patch("/id", h.Update)
 	}
 	if rs.has(ProductDelete) {
-		r.Delete("/{id}", FastHttpHandler(h.Delete))
+		r.Delete("/id", h.Delete)
 	}
 	if rs.has(ProductList) {
-		r.Get("/", FastHttpHandler(h.List))
+		r.Get("/", h.List)
 	}
 }
 
@@ -164,31 +153,31 @@ func NewTodoHandler(c *ent.Client, l *zap.Logger) *TodoHandler {
 // RegisterHandlers registers the generated handlers on the given chi router.
 func (h *TodoHandler) Mount(r fiber.Router, rs Routes) {
 	if rs.has(TodoCreate) {
-		r.Post("/", FastHttpHandler(h.Create))
+		r.Post("/", h.Create)
 	}
 	if rs.has(TodoRead) {
-		r.Get("/{id}", FastHttpHandler(h.Read))
+		r.Get("/:id", h.Read)
 	}
 	if rs.has(TodoUpdate) {
-		r.Patch("/{id}", FastHttpHandler(h.Update))
+		r.Patch("/id", h.Update)
 	}
 	if rs.has(TodoDelete) {
-		r.Delete("/{id}", FastHttpHandler(h.Delete))
+		r.Delete("/id", h.Delete)
 	}
 	if rs.has(TodoList) {
-		r.Get("/", FastHttpHandler(h.List))
+		r.Get("/", h.List)
 	}
 	if rs.has(TodoParent) {
-		r.Get("/{id}/parent", FastHttpHandler(h.Parent))
+		r.Get("/:id/parent", h.Parent)
 	}
 	if rs.has(TodoChildren) {
-		r.Get("/{id}/children", FastHttpHandler(h.Children))
+		r.Get("/:id/children", h.Children)
 	}
 	if rs.has(TodoCategory) {
-		r.Get("/{id}/category", FastHttpHandler(h.Category))
+		r.Get("/:id/category", h.Category)
 	}
 	if rs.has(TodoSecret) {
-		r.Get("/{id}/secret", FastHttpHandler(h.Secret))
+		r.Get("/:id/secret", h.Secret)
 	}
 }
 
@@ -219,19 +208,19 @@ func NewVerySecretHandler(c *ent.Client, l *zap.Logger) *VerySecretHandler {
 // RegisterHandlers registers the generated handlers on the given chi router.
 func (h *VerySecretHandler) Mount(r fiber.Router, rs Routes) {
 	if rs.has(VerySecretCreate) {
-		r.Post("/", FastHttpHandler(h.Create))
+		r.Post("/", h.Create)
 	}
 	if rs.has(VerySecretRead) {
-		r.Get("/{id}", FastHttpHandler(h.Read))
+		r.Get("/:id", h.Read)
 	}
 	if rs.has(VerySecretUpdate) {
-		r.Patch("/{id}", FastHttpHandler(h.Update))
+		r.Patch("/id", h.Update)
 	}
 	if rs.has(VerySecretDelete) {
-		r.Delete("/{id}", FastHttpHandler(h.Delete))
+		r.Delete("/id", h.Delete)
 	}
 	if rs.has(VerySecretList) {
-		r.Get("/", FastHttpHandler(h.List))
+		r.Get("/", h.List)
 	}
 }
 

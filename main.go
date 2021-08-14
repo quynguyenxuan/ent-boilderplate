@@ -39,7 +39,6 @@ import (
 
 	_ "entgo.io/quynguyen-todo/docs"
 	elk "entgo.io/quynguyen-todo/ent/http"
-	swagger "github.com/arsmn/fiber-swagger/v2"
 )
 
 func main() {
@@ -84,8 +83,7 @@ func main() {
 		return nil
 	})
 
-	// group := app.Group("/todos")
-	// group.
+	group := app.Group("/products")
 
 	// app.All("/todos", func(c *fiber.Ctx) error {
 
@@ -98,8 +96,7 @@ func main() {
 	// 	elk.NewProductHandler(client, log).Mount(c.App(), elk.ProductRoutes)
 	// 	return nil
 	// })
-	var productGroup = app.Group("products")
-	elk.NewProductHandler(client, log).Mount(productGroup, elk.ProductRoutes)
+	elk.NewProductHandler(client, log).Mount(group, elk.ProductRoutes)
 
 	// r.Route("/users", func(r chi.Router) {
 	// 	// Only register the create and read endpoints.
@@ -113,7 +110,7 @@ func main() {
 		return nil
 	})
 
-	app.Get("/swagger/*", swagger.Handler) // default
+	// app.Get("/swagger/*", swagger.Handler) // default
 
 	// app.Get("/swagger/*", swagger.New(swagger.Config{ // custom
 	// 	URL:         "http://example.com/doc.json",
