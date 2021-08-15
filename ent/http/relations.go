@@ -28,6 +28,18 @@ import (
 	"go.uber.org/zap"
 )
 
+// @Summary Get Category with Todos
+// @Description Get Category with Todos
+// @ID Get Category with Todos
+// @Tags [Category]
+// @Accept  json
+// @Produce  json
+// @Param id path int true "Category ID"
+// @Success 200 {object} ent.Category
+// @Failure 400 {object} main.HTTPError
+// @Failure 404 {object} main.HTTPError
+// @Failure 500 {object} main.HTTPError
+// @Router /category/{id}/todos [get]
 // Todos fetches the ent.todos attached to the ent.Category
 // identified by a given url-parameter from the database and renders it to the client.
 func (h CategoryHandler) Todos(c *fiber.Ctx) error {
@@ -67,6 +79,18 @@ func (h CategoryHandler) Todos(c *fiber.Ctx) error {
 	return c.JSON(NewTodo2548332322Views(es))
 }
 
+// @Summary Get Todo with Parent
+// @Description Get Todo with Parent
+// @ID Get Todo with Parent
+// @Tags [Todo]
+// @Accept  json
+// @Produce  json
+// @Param id path int true "Todo ID"
+// @Success 200 {object} ent.Todo
+// @Failure 400 {object} main.HTTPError
+// @Failure 404 {object} main.HTTPError
+// @Failure 500 {object} main.HTTPError
+// @Router /todo/{id}/parent [get]
 // Parent fetches the ent.parent attached to the ent.Todo
 // identified by a given url-parameter from the database and renders it to the client.
 func (h TodoHandler) Parent(c *fiber.Ctx) error {
@@ -103,6 +127,18 @@ func (h TodoHandler) Parent(c *fiber.Ctx) error {
 	return c.JSON(NewTodo2548332322View(e))
 }
 
+// @Summary Get Todo with Children
+// @Description Get Todo with Children
+// @ID Get Todo with Children
+// @Tags [Todo]
+// @Accept  json
+// @Produce  json
+// @Param id path int true "Todo ID"
+// @Success 200 {object} ent.Todo
+// @Failure 400 {object} main.HTTPError
+// @Failure 404 {object} main.HTTPError
+// @Failure 500 {object} main.HTTPError
+// @Router /todo/{id}/children [get]
 // Children fetches the ent.children attached to the ent.Todo
 // identified by a given url-parameter from the database and renders it to the client.
 func (h TodoHandler) Children(c *fiber.Ctx) error {
@@ -142,6 +178,18 @@ func (h TodoHandler) Children(c *fiber.Ctx) error {
 	return c.JSON(NewTodo2548332322Views(es))
 }
 
+// @Summary Get Todo with Category
+// @Description Get Todo with Category
+// @ID Get Todo with Category
+// @Tags [Todo]
+// @Accept  json
+// @Produce  json
+// @Param id path int true "Todo ID"
+// @Success 200 {object} ent.Todo
+// @Failure 400 {object} main.HTTPError
+// @Failure 404 {object} main.HTTPError
+// @Failure 500 {object} main.HTTPError
+// @Router /todo/{id}/category [get]
 // Category fetches the ent.category attached to the ent.Todo
 // identified by a given url-parameter from the database and renders it to the client.
 func (h TodoHandler) Category(c *fiber.Ctx) error {
@@ -178,6 +226,18 @@ func (h TodoHandler) Category(c *fiber.Ctx) error {
 	return c.JSON(NewCategory656363463View(e))
 }
 
+// @Summary Get Todo with Secret
+// @Description Get Todo with Secret
+// @ID Get Todo with Secret
+// @Tags [Todo]
+// @Accept  json
+// @Produce  json
+// @Param id path int true "Todo ID"
+// @Success 200 {object} ent.Todo
+// @Failure 400 {object} main.HTTPError
+// @Failure 404 {object} main.HTTPError
+// @Failure 500 {object} main.HTTPError
+// @Router /todo/{id}/secret [get]
 // Secret fetches the ent.secret attached to the ent.Todo
 // identified by a given url-parameter from the database and renders it to the client.
 func (h TodoHandler) Secret(c *fiber.Ctx) error {

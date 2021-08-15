@@ -14,6 +14,7 @@ type Product implements Node {
 
 input ProductInput {
   status: ProductStatus! = DRAFT
+  createdAt: Time
   priority: Int
   text: String!
 }

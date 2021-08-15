@@ -29,6 +29,17 @@ import (
 	"go.uber.org/zap"
 )
 
+// @Summary Create a Category
+// @Description create a Category
+// @ID Create new Category
+// @Tags [Category]
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} ent.Category
+// @Failure 400 {object} main.HTTPError
+// @Failure 404 {object} main.HTTPError
+// @Failure 500 {object} main.HTTPError
+// @Router /category [post]
 // Create creates a new ent.Category and stores it in the database.
 func (h CategoryHandler) Create(c *fiber.Ctx) error {
 	l := h.log.With(zap.String("method", "Create"))
@@ -104,6 +115,17 @@ func (h CategoryHandler) Create(c *fiber.Ctx) error {
 	return c.JSON(NewCategory656363463View(e))
 }
 
+// @Summary Create a Product
+// @Description create a Product
+// @ID Create new Product
+// @Tags [Product]
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} ent.Product
+// @Failure 400 {object} main.HTTPError
+// @Failure 404 {object} main.HTTPError
+// @Failure 500 {object} main.HTTPError
+// @Router /product [post]
 // Create creates a new ent.Product and stores it in the database.
 func (h ProductHandler) Create(c *fiber.Ctx) error {
 	l := h.log.With(zap.String("method", "Create"))
@@ -185,6 +207,17 @@ func (h ProductHandler) Create(c *fiber.Ctx) error {
 	return c.JSON(NewProduct1899176864View(e))
 }
 
+// @Summary Create a Todo
+// @Description create a Todo
+// @ID Create new Todo
+// @Tags [Todo]
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} ent.Todo
+// @Failure 400 {object} main.HTTPError
+// @Failure 404 {object} main.HTTPError
+// @Failure 500 {object} main.HTTPError
+// @Router /todo [post]
 // Create creates a new ent.Todo and stores it in the database.
 func (h TodoHandler) Create(c *fiber.Ctx) error {
 	l := h.log.With(zap.String("method", "Create"))
@@ -281,6 +314,17 @@ func (h TodoHandler) Create(c *fiber.Ctx) error {
 	return c.JSON(NewTodo2548332322View(e))
 }
 
+// @Summary Create a VerySecret
+// @Description create a VerySecret
+// @ID Create new VerySecret
+// @Tags [VerySecret]
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} ent.VerySecret
+// @Failure 400 {object} main.HTTPError
+// @Failure 404 {object} main.HTTPError
+// @Failure 500 {object} main.HTTPError
+// @Router /verysecret [post]
 // Create creates a new ent.VerySecret and stores it in the database.
 func (h VerySecretHandler) Create(c *fiber.Ctx) error {
 	l := h.log.With(zap.String("method", "Create"))

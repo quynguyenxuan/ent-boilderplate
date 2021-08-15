@@ -30,6 +30,18 @@ import (
 	"go.uber.org/zap"
 )
 
+// @Summary Update a Category
+// @Description Update a Category
+// @ID Update a Category
+// @Tags [Category]
+// @Accept  json
+// @Produce  json
+// @Param id path int true "Category ID"
+// @Success 200 {object} ent.Category
+// @Failure 400 {object} main.HTTPError
+// @Failure 404 {object} main.HTTPError
+// @Failure 500 {object} main.HTTPError
+// @Router /category/{id} [patch]
 // Update updates a given ent.Category and saves the changes to the database.
 func (h CategoryHandler) Update(c *fiber.Ctx) error {
 	l := h.log.With(zap.String("method", "Update"))
@@ -120,6 +132,18 @@ func (h CategoryHandler) Update(c *fiber.Ctx) error {
 	return c.JSON(NewCategory656363463View(e))
 }
 
+// @Summary Update a Product
+// @Description Update a Product
+// @ID Update a Product
+// @Tags [Product]
+// @Accept  json
+// @Produce  json
+// @Param id path int true "Product ID"
+// @Success 200 {object} ent.Product
+// @Failure 400 {object} main.HTTPError
+// @Failure 404 {object} main.HTTPError
+// @Failure 500 {object} main.HTTPError
+// @Router /product/{id} [patch]
 // Update updates a given ent.Product and saves the changes to the database.
 func (h ProductHandler) Update(c *fiber.Ctx) error {
 	l := h.log.With(zap.String("method", "Update"))
@@ -213,6 +237,18 @@ func (h ProductHandler) Update(c *fiber.Ctx) error {
 	return c.JSON(NewProduct1899176864View(e))
 }
 
+// @Summary Update a Todo
+// @Description Update a Todo
+// @ID Update a Todo
+// @Tags [Todo]
+// @Accept  json
+// @Produce  json
+// @Param id path int true "Todo ID"
+// @Success 200 {object} ent.Todo
+// @Failure 400 {object} main.HTTPError
+// @Failure 404 {object} main.HTTPError
+// @Failure 500 {object} main.HTTPError
+// @Router /todo/{id} [patch]
 // Update updates a given ent.Todo and saves the changes to the database.
 func (h TodoHandler) Update(c *fiber.Ctx) error {
 	l := h.log.With(zap.String("method", "Update"))
@@ -324,6 +360,18 @@ func (h TodoHandler) Update(c *fiber.Ctx) error {
 	return c.JSON(NewTodo2548332322View(e))
 }
 
+// @Summary Update a VerySecret
+// @Description Update a VerySecret
+// @ID Update a VerySecret
+// @Tags [VerySecret]
+// @Accept  json
+// @Produce  json
+// @Param id path int true "VerySecret ID"
+// @Success 200 {object} ent.VerySecret
+// @Failure 400 {object} main.HTTPError
+// @Failure 404 {object} main.HTTPError
+// @Failure 500 {object} main.HTTPError
+// @Router /verysecret/{id} [patch]
 // Update updates a given ent.VerySecret and saves the changes to the database.
 func (h VerySecretHandler) Update(c *fiber.Ctx) error {
 	l := h.log.With(zap.String("method", "Update"))

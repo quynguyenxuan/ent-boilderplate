@@ -66,10 +66,10 @@ func (h *CategoryHandler) Mount(r fiber.Router, rs Routes) {
 		r.Get("/:id", h.Read)
 	}
 	if rs.has(CategoryUpdate) {
-		r.Patch("/id", h.Update)
+		r.Patch("/:id", h.Update)
 	}
 	if rs.has(CategoryDelete) {
-		r.Delete("/id", h.Delete)
+		r.Delete("/:id", h.Delete)
 	}
 	if rs.has(CategoryList) {
 		r.Get("/", h.List)
@@ -112,10 +112,10 @@ func (h *ProductHandler) Mount(r fiber.Router, rs Routes) {
 		r.Get("/:id", h.Read)
 	}
 	if rs.has(ProductUpdate) {
-		r.Patch("/id", h.Update)
+		r.Patch("/:id", h.Update)
 	}
 	if rs.has(ProductDelete) {
-		r.Delete("/id", h.Delete)
+		r.Delete("/:id", h.Delete)
 	}
 	if rs.has(ProductList) {
 		r.Get("/", h.List)
@@ -159,10 +159,10 @@ func (h *TodoHandler) Mount(r fiber.Router, rs Routes) {
 		r.Get("/:id", h.Read)
 	}
 	if rs.has(TodoUpdate) {
-		r.Patch("/id", h.Update)
+		r.Patch("/:id", h.Update)
 	}
 	if rs.has(TodoDelete) {
-		r.Delete("/id", h.Delete)
+		r.Delete("/:id", h.Delete)
 	}
 	if rs.has(TodoList) {
 		r.Get("/", h.List)
@@ -214,10 +214,10 @@ func (h *VerySecretHandler) Mount(r fiber.Router, rs Routes) {
 		r.Get("/:id", h.Read)
 	}
 	if rs.has(VerySecretUpdate) {
-		r.Patch("/id", h.Update)
+		r.Patch("/:id", h.Update)
 	}
 	if rs.has(VerySecretDelete) {
-		r.Delete("/id", h.Delete)
+		r.Delete("/:id", h.Delete)
 	}
 	if rs.has(VerySecretList) {
 		r.Get("/", h.List)

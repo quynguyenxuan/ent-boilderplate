@@ -1,4 +1,928 @@
+basePath: /api
+definitions:
+  ent.Category:
+    properties:
+      config:
+        $ref: '#/definitions/schematype.CategoryConfig'
+        description: Config holds the value of the "config" field.
+      edges:
+        $ref: '#/definitions/ent.CategoryEdges'
+        description: |-
+          Edges holds the relations/edges for other nodes in the graph.
+          The values are being populated by the CategoryQuery when eager-loading is set.
+      id:
+        description: ID of the ent.
+        type: integer
+      status:
+        description: Status holds the value of the "status" field.
+        type: string
+      text:
+        description: Text holds the value of the "text" field.
+        type: string
+    type: object
+  ent.CategoryEdges:
+    properties:
+      todos:
+        description: Todos holds the value of the todos edge.
+        items:
+          $ref: '#/definitions/ent.Todo'
+        type: array
+    type: object
+  ent.Product:
+    properties:
+      created_at:
+        description: CreatedAt holds the value of the "created_at" field.
+        type: string
+      id:
+        description: ID of the ent.
+        type: integer
+      priority:
+        description: Priority holds the value of the "priority" field.
+        type: integer
+      status:
+        description: Status holds the value of the "status" field.
+        type: string
+      text:
+        description: Text holds the value of the "text" field.
+        type: string
+    type: object
+  ent.Todo:
+    properties:
+      blob:
+        description: Blob holds the value of the "blob" field.
+        items:
+          type: integer
+        type: array
+      created_at:
+        description: CreatedAt holds the value of the "created_at" field.
+        type: string
+      edges:
+        $ref: '#/definitions/ent.TodoEdges'
+        description: |-
+          Edges holds the relations/edges for other nodes in the graph.
+          The values are being populated by the TodoQuery when eager-loading is set.
+      id:
+        description: ID of the ent.
+        type: integer
+      priority:
+        description: Priority holds the value of the "priority" field.
+        type: integer
+      status:
+        description: Status holds the value of the "status" field.
+        type: string
+      text:
+        description: Text holds the value of the "text" field.
+        type: string
+    type: object
+  ent.TodoEdges:
+    properties:
+      category:
+        $ref: '#/definitions/ent.Category'
+        description: Category holds the value of the category edge.
+      children:
+        description: Children holds the value of the children edge.
+        items:
+          $ref: '#/definitions/ent.Todo'
+        type: array
+      parent:
+        $ref: '#/definitions/ent.Todo'
+        description: Parent holds the value of the parent edge.
+      secret:
+        $ref: '#/definitions/ent.VerySecret'
+        description: Secret holds the value of the secret edge.
+    type: object
+  ent.VerySecret:
+    properties:
+      id:
+        description: ID of the ent.
+        type: integer
+      password:
+        description: Password holds the value of the "password" field.
+        type: string
+    type: object
+  main.HTTPError:
+    properties:
+      code:
+        example: 400
+        type: integer
+      message:
+        example: status bad request
+        type: string
+    type: object
+  schematype.CategoryConfig:
+    properties:
+      maxMembers:
+        type: integer
+    type: object
+host: localhost:8081
 info:
-  contact: {}
-paths: {}
+  contact:
+    email: fiber@swagger.io
+    name: API Support
+  description: This is a sample swagger for Fiber
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Fiber API
+  version: "1.0"
+paths:
+  /category:
+    get:
+      consumes:
+      - application/json
+      description: Fetches Category
+      operationId: Fetches Category
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ent.Category'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+      summary: Fetches Category
+      tags:
+      - '[Category]'
+    post:
+      consumes:
+      - application/json
+      description: create a Category
+      operationId: Create new Category
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Category'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+      summary: Create a Category
+      tags:
+      - '[Category]'
+  /category/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a Category
+      operationId: Delete a Category
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Category'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+      summary: Delete a Category
+      tags:
+      - '[Category]'
+    get:
+      consumes:
+      - application/json
+      description: Read a Category
+      operationId: Read a Category
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Category'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+      summary: Read a Category
+      tags:
+      - '[Category]'
+    patch:
+      consumes:
+      - application/json
+      description: Update a Category
+      operationId: Update a Category
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Category'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+      summary: Update a Category
+      tags:
+      - '[Category]'
+  /category/{id}/todos:
+    get:
+      consumes:
+      - application/json
+      description: Get Category with Todos
+      operationId: Get Category with Todos
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Category'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+      summary: Get Category with Todos
+      tags:
+      - '[Category]'
+  /product:
+    get:
+      consumes:
+      - application/json
+      description: Fetches Product
+      operationId: Fetches Product
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ent.Product'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+      summary: Fetches Product
+      tags:
+      - '[Product]'
+    post:
+      consumes:
+      - application/json
+      description: create a Product
+      operationId: Create new Product
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Product'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+      summary: Create a Product
+      tags:
+      - '[Product]'
+  /product/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a Product
+      operationId: Delete a Product
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Product'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+      summary: Delete a Product
+      tags:
+      - '[Product]'
+    get:
+      consumes:
+      - application/json
+      description: Read a Product
+      operationId: Read a Product
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Product'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+      summary: Read a Product
+      tags:
+      - '[Product]'
+    patch:
+      consumes:
+      - application/json
+      description: Update a Product
+      operationId: Update a Product
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Product'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+      summary: Update a Product
+      tags:
+      - '[Product]'
+  /todo:
+    get:
+      consumes:
+      - application/json
+      description: Fetches Todo
+      operationId: Fetches Todo
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ent.Todo'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+      summary: Fetches Todo
+      tags:
+      - '[Todo]'
+    post:
+      consumes:
+      - application/json
+      description: create a Todo
+      operationId: Create new Todo
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Todo'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+      summary: Create a Todo
+      tags:
+      - '[Todo]'
+  /todo/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a Todo
+      operationId: Delete a Todo
+      parameters:
+      - description: Todo ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Todo'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+      summary: Delete a Todo
+      tags:
+      - '[Todo]'
+    get:
+      consumes:
+      - application/json
+      description: Read a Todo
+      operationId: Read a Todo
+      parameters:
+      - description: Todo ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Todo'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+      summary: Read a Todo
+      tags:
+      - '[Todo]'
+    patch:
+      consumes:
+      - application/json
+      description: Update a Todo
+      operationId: Update a Todo
+      parameters:
+      - description: Todo ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Todo'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+      summary: Update a Todo
+      tags:
+      - '[Todo]'
+  /todo/{id}/category:
+    get:
+      consumes:
+      - application/json
+      description: Get Todo with Category
+      operationId: Get Todo with Category
+      parameters:
+      - description: Todo ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Todo'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+      summary: Get Todo with Category
+      tags:
+      - '[Todo]'
+  /todo/{id}/children:
+    get:
+      consumes:
+      - application/json
+      description: Get Todo with Children
+      operationId: Get Todo with Children
+      parameters:
+      - description: Todo ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Todo'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+      summary: Get Todo with Children
+      tags:
+      - '[Todo]'
+  /todo/{id}/parent:
+    get:
+      consumes:
+      - application/json
+      description: Get Todo with Parent
+      operationId: Get Todo with Parent
+      parameters:
+      - description: Todo ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Todo'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+      summary: Get Todo with Parent
+      tags:
+      - '[Todo]'
+  /todo/{id}/secret:
+    get:
+      consumes:
+      - application/json
+      description: Get Todo with Secret
+      operationId: Get Todo with Secret
+      parameters:
+      - description: Todo ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Todo'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+      summary: Get Todo with Secret
+      tags:
+      - '[Todo]'
+  /verysecret:
+    get:
+      consumes:
+      - application/json
+      description: Fetches VerySecret
+      operationId: Fetches VerySecret
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ent.VerySecret'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+      summary: Fetches VerySecret
+      tags:
+      - '[VerySecret]'
+    post:
+      consumes:
+      - application/json
+      description: create a VerySecret
+      operationId: Create new VerySecret
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.VerySecret'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+      summary: Create a VerySecret
+      tags:
+      - '[VerySecret]'
+  /verysecret/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a VerySecret
+      operationId: Delete a VerySecret
+      parameters:
+      - description: VerySecret ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.VerySecret'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+      summary: Delete a VerySecret
+      tags:
+      - '[VerySecret]'
+    get:
+      consumes:
+      - application/json
+      description: Read a VerySecret
+      operationId: Read a VerySecret
+      parameters:
+      - description: VerySecret ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.VerySecret'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+      summary: Read a VerySecret
+      tags:
+      - '[VerySecret]'
+    patch:
+      consumes:
+      - application/json
+      description: Update a VerySecret
+      operationId: Update a VerySecret
+      parameters:
+      - description: VerySecret ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.VerySecret'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/main.HTTPError'
+      summary: Update a VerySecret
+      tags:
+      - '[VerySecret]'
 swagger: "2.0"

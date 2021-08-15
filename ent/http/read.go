@@ -30,6 +30,18 @@ import (
 	"go.uber.org/zap"
 )
 
+// @Summary Read a Category
+// @Description Read a Category
+// @ID Read a Category
+// @Tags [Category]
+// @Accept  json
+// @Produce  json
+// @Param id path int true "Category ID"
+// @Success 200 {object} ent.Category
+// @Failure 400 {object} main.HTTPError
+// @Failure 404 {object} main.HTTPError
+// @Failure 500 {object} main.HTTPError
+// @Router /category/{id} [get]
 // Read fetches the ent.Category identified by a given url-parameter from the
 // database and renders it to the client.
 func (h *CategoryHandler) Read(c *fiber.Ctx) error {
@@ -65,6 +77,18 @@ func (h *CategoryHandler) Read(c *fiber.Ctx) error {
 	return c.JSON(NewCategory656363463View(e))
 }
 
+// @Summary Read a Product
+// @Description Read a Product
+// @ID Read a Product
+// @Tags [Product]
+// @Accept  json
+// @Produce  json
+// @Param id path int true "Product ID"
+// @Success 200 {object} ent.Product
+// @Failure 400 {object} main.HTTPError
+// @Failure 404 {object} main.HTTPError
+// @Failure 500 {object} main.HTTPError
+// @Router /product/{id} [get]
 // Read fetches the ent.Product identified by a given url-parameter from the
 // database and renders it to the client.
 func (h *ProductHandler) Read(c *fiber.Ctx) error {
@@ -100,6 +124,18 @@ func (h *ProductHandler) Read(c *fiber.Ctx) error {
 	return c.JSON(NewProduct1899176864View(e))
 }
 
+// @Summary Read a Todo
+// @Description Read a Todo
+// @ID Read a Todo
+// @Tags [Todo]
+// @Accept  json
+// @Produce  json
+// @Param id path int true "Todo ID"
+// @Success 200 {object} ent.Todo
+// @Failure 400 {object} main.HTTPError
+// @Failure 404 {object} main.HTTPError
+// @Failure 500 {object} main.HTTPError
+// @Router /todo/{id} [get]
 // Read fetches the ent.Todo identified by a given url-parameter from the
 // database and renders it to the client.
 func (h *TodoHandler) Read(c *fiber.Ctx) error {
@@ -135,6 +171,18 @@ func (h *TodoHandler) Read(c *fiber.Ctx) error {
 	return c.JSON(NewTodo2548332322View(e))
 }
 
+// @Summary Read a VerySecret
+// @Description Read a VerySecret
+// @ID Read a VerySecret
+// @Tags [VerySecret]
+// @Accept  json
+// @Produce  json
+// @Param id path int true "VerySecret ID"
+// @Success 200 {object} ent.VerySecret
+// @Failure 400 {object} main.HTTPError
+// @Failure 404 {object} main.HTTPError
+// @Failure 500 {object} main.HTTPError
+// @Router /verysecret/{id} [get]
 // Read fetches the ent.VerySecret identified by a given url-parameter from the
 // database and renders it to the client.
 func (h *VerySecretHandler) Read(c *fiber.Ctx) error {

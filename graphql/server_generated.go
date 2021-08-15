@@ -740,6 +740,7 @@ type Product implements Node {
 
 input ProductInput {
   status: ProductStatus! = DRAFT
+  createdAt: Time
   priority: Int
   text: String!
 }
@@ -786,6 +787,7 @@ type Todo implements Node {
 
 input TodoInput {
   status: TodoStatus! = IN_PROGRESS
+  createdAt: Time
   priority: Int
   text: String!
   parent: ID
@@ -3844,6 +3846,14 @@ func (ec *executionContext) unmarshalInputProductInput(ctx context.Context, obj 
 			if err != nil {
 				return it, err
 			}
+		case "createdAt":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAt"))
+			it.CreatedAt, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "priority":
 			var err error
 
@@ -4209,6 +4219,14 @@ func (ec *executionContext) unmarshalInputTodoInput(ctx context.Context, obj int
 
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
 			it.Status, err = ec.unmarshalNTodoStatus2entgoᚗioᚋquynguyenᚑtodoᚋentᚋtodoᚐStatus(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "createdAt":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("createdAt"))
+			it.CreatedAt, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
 			if err != nil {
 				return it, err
 			}

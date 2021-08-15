@@ -17,6 +17,7 @@ type Todo implements Node {
 
 input TodoInput {
   status: TodoStatus! = IN_PROGRESS
+  createdAt: Time
   priority: Int
   text: String!
   parent: ID

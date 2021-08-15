@@ -26,6 +26,18 @@ import (
 	"go.uber.org/zap"
 )
 
+// @Summary Delete a Category
+// @Description Delete a Category
+// @ID Delete a Category
+// @Tags [Category]
+// @Accept  json
+// @Produce  json
+// @Param id path int true "Category ID"
+// @Success 200 {object} ent.Category
+// @Failure 400 {object} main.HTTPError
+// @Failure 404 {object} main.HTTPError
+// @Failure 500 {object} main.HTTPError
+// @Router /category/{id} [delete]
 // Delete removes a ent.Category from the database.
 func (h CategoryHandler) Delete(c *fiber.Ctx) error {
 	l := h.log.With(zap.String("method", "Delete"))
@@ -54,6 +66,18 @@ func (h CategoryHandler) Delete(c *fiber.Ctx) error {
 	return c.SendString("Delete successfully")
 }
 
+// @Summary Delete a Product
+// @Description Delete a Product
+// @ID Delete a Product
+// @Tags [Product]
+// @Accept  json
+// @Produce  json
+// @Param id path int true "Product ID"
+// @Success 200 {object} ent.Product
+// @Failure 400 {object} main.HTTPError
+// @Failure 404 {object} main.HTTPError
+// @Failure 500 {object} main.HTTPError
+// @Router /product/{id} [delete]
 // Delete removes a ent.Product from the database.
 func (h ProductHandler) Delete(c *fiber.Ctx) error {
 	l := h.log.With(zap.String("method", "Delete"))
@@ -82,6 +106,18 @@ func (h ProductHandler) Delete(c *fiber.Ctx) error {
 	return c.SendString("Delete successfully")
 }
 
+// @Summary Delete a Todo
+// @Description Delete a Todo
+// @ID Delete a Todo
+// @Tags [Todo]
+// @Accept  json
+// @Produce  json
+// @Param id path int true "Todo ID"
+// @Success 200 {object} ent.Todo
+// @Failure 400 {object} main.HTTPError
+// @Failure 404 {object} main.HTTPError
+// @Failure 500 {object} main.HTTPError
+// @Router /todo/{id} [delete]
 // Delete removes a ent.Todo from the database.
 func (h TodoHandler) Delete(c *fiber.Ctx) error {
 	l := h.log.With(zap.String("method", "Delete"))
@@ -110,6 +146,18 @@ func (h TodoHandler) Delete(c *fiber.Ctx) error {
 	return c.SendString("Delete successfully")
 }
 
+// @Summary Delete a VerySecret
+// @Description Delete a VerySecret
+// @ID Delete a VerySecret
+// @Tags [VerySecret]
+// @Accept  json
+// @Produce  json
+// @Param id path int true "VerySecret ID"
+// @Success 200 {object} ent.VerySecret
+// @Failure 400 {object} main.HTTPError
+// @Failure 404 {object} main.HTTPError
+// @Failure 500 {object} main.HTTPError
+// @Router /verysecret/{id} [delete]
 // Delete removes a ent.VerySecret from the database.
 func (h VerySecretHandler) Delete(c *fiber.Ctx) error {
 	l := h.log.With(zap.String("method", "Delete"))

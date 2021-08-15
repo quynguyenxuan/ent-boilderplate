@@ -39,8 +39,24 @@ import (
 
 	_ "entgo.io/quynguyen-todo/docs"
 	elk "entgo.io/quynguyen-todo/ent/http"
+	swagger "github.com/arsmn/fiber-swagger/v2"
 )
 
+type HTTPError struct {
+	Code    int    `json:"code" example:"400"`
+	Message string `json:"message" example:"status bad request"`
+}
+
+// @title Fiber API
+// @version 1.0
+// @description This is a sample swagger for Fiber
+// @termsOfService http://swagger.io/terms/
+// @contact.name API Support
+// @contact.email fiber@swagger.io
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+// @host localhost:8081
+// @BasePath /api
 func main() {
 	var cli struct {
 		Addr  string `name:"address" default:":8081" help:"Address to listen on."`
@@ -83,25 +99,13 @@ func main() {
 		return nil
 	})
 
-	group := app.Group("/products")
+	api := app.Group("/api")
 
-	// app.All("/todos", func(c *fiber.Ctx) error {
+	productsRouter := api.Group("/product")
+	elk.NewProductHandler(client, log).Mount(productsRouter, elk.ProductRoutes)
 
-	// 	// var r http.Request
-	// 	// ctx := c.Context()
-	// 	// if err := fasthttpadaptor.ConvertRequest(ctx, &r, true); err != nil {
-	// 	// 	ctx.Logger().Printf("cannot parse requestURI %q: %s", r.RequestURI, err)
-	// 	// 	return nil
-	// 	// }
-	// 	elk.NewProductHandler(client, log).Mount(c.App(), elk.ProductRoutes)
-	// 	return nil
-	// })
-	elk.NewProductHandler(client, log).Mount(group, elk.ProductRoutes)
-
-	// r.Route("/users", func(r chi.Router) {
-	// 	// Only register the create and read endpoints.
-	// 	elk.NewUserHandler(c, log).Mount(r, elk.UserCreate|elk.UserRead)
-	// })
+	todosRouter := api.Group("/todo")
+	elk.NewProductHandler(client, log).Mount(todosRouter, elk.TodoRoutes)
 
 	app.All("/playground", func(c *fiber.Ctx) error {
 		ctx := c.Context()
@@ -110,32 +114,23 @@ func main() {
 		return nil
 	})
 
-	// app.Get("/swagger/*", swagger.Handler) // default
+	app.Get("/swagger/*", swagger.Handler) // default
 
-	// app.Get("/swagger/*", swagger.New(swagger.Config{ // custom
-	// 	URL:         "http://example.com/doc.json",
-	// 	DeepLinking: false,
-	// 	// Expand ("list") or Collapse ("none") tag groups by default
-	// 	DocExpansion: "none",
-	// 	// Prefill OAuth ClientId on Authorize popup
-	// 	OAuth: &swagger.OAuthConfig{
-	// 		AppName:  "OAuth Provider",
-	// 		ClientId: "21bb4edc-05a7-4afc-86f1-2e151e4ba6e2",
-	// 	},
-	// 	// Ability to change OAuth2 redirect uri location
-	// 	OAuth2RedirectUrl: "http://localhost:8080/swagger/oauth2-redirect.html",
-	// }))
+	app.Get("/swagger/*", swagger.New(swagger.Config{ // custom
+		URL:         "http:/localhost:8081/doc.json",
+		DeepLinking: true,
+		// Expand ("list") or Collapse ("none") tag groups by default
+		DocExpansion: "none",
+		// Prefill OAuth ClientId on Authorize popup
+		// OAuth: &swagger.OAuthConfig{
+		// 	AppName:  "OAuth Provider",
+		// 	ClientId: "21bb4edc-05a7-4afc-86f1-2e151e4ba6e2",
+		// },
+		// Ability to change OAuth2 redirect uri location
+		OAuth2RedirectUrl: "http://localhost:8081/swagger/oauth2-redirect.html",
+	}))
 
 	app.Listen(cli.Addr)
-
-	// http.Handle("/",
-	// 	playground.Handler("Todo", "/query"),
-	// )
-	// http.Handle("/query", srv)
-
-	// if err := http.ListenAndServe(cli.Addr, nil); err != nil {
-	// 	log.Error("http server terminated", zap.Error(err))
-	// }
 
 	log.Info("listening on", zap.String("address", cli.Addr))
 }

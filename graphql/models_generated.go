@@ -3,18 +3,22 @@
 package graphql
 
 import (
+	"time"
+
 	"entgo.io/quynguyen-todo/ent/product"
 	"entgo.io/quynguyen-todo/ent/todo"
 )
 
 type ProductInput struct {
-	Status   product.Status `json:"status"`
-	Priority *int           `json:"priority"`
-	Text     string         `json:"text"`
+	Status    product.Status `json:"status"`
+	CreatedAt *time.Time     `json:"createdAt"`
+	Priority  *int           `json:"priority"`
+	Text      string         `json:"text"`
 }
 
 type TodoInput struct {
 	Status     todo.Status `json:"status"`
+	CreatedAt  *time.Time  `json:"createdAt"`
 	Priority   *int        `json:"priority"`
 	Text       string      `json:"text"`
 	Parent     *int        `json:"parent"`

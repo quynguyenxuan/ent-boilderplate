@@ -5,6 +5,8 @@ gen-ent:
 	go generate ./ent
 gen-gql:
 	go generate -mod=mod ./...
+gen-doc:
+	swag init
 air:
 	air
 serve:
