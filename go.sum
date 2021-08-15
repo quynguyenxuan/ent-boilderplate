@@ -254,6 +254,8 @@ github.com/mailru/easyjson v0.0.0-20190626092158-b2ccc519800e/go.mod h1:C1wdFJiN
 github.com/mailru/easyjson v0.7.6/go.mod h1:xzfreul335JAWq5oZzymOObrkdz5UnU4kGfJJLY9Nlc=
 github.com/mailru/easyjson v0.7.7 h1:UGYAvKxe3sBsEDzO8ZeWOSlIQfWFlxbzLZe7hwFURr0=
 github.com/mailru/easyjson v0.7.7/go.mod h1:xzfreul335JAWq5oZzymOObrkdz5UnU4kGfJJLY9Nlc=
+github.com/masseelch/elk v0.3.2 h1:87AmOFeym+PvfgYhe6XKbt5LaADTGG3R5v08jct2uWM=
+github.com/masseelch/elk v0.3.2/go.mod h1:D7sdxg2h+f44kiYVK/Nyx0FlIUg7TpW6JRank+bs62o=
 github.com/masseelch/render v1.0.4 h1:NEeEG9ID7yBdtEkmQLnm3fisRr8Vp18ZnAMxFvddzE0=
 github.com/masseelch/render v1.0.4/go.mod h1:INTWrYMuK4afMYqn8ZTxhAN2F5nzT5ZJR4UyyKh8sts=
 github.com/matryer/moq v0.0.0-20200106131100-75d0ddfc0007/go.mod h1:9ELz6aaclSIGnZBoaSLZ3NAl1VTufbOrXBPvtcy6WiQ=

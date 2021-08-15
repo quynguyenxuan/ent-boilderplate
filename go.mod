@@ -33,7 +33,4 @@ require (
 	golang.org/x/sys v0.0.0-20210809222454-d867a43fc93e // indirect
 	golang.org/x/text v0.3.7 // indirect
 )
-
-// replace github.com/mailru/easyjson => ./patches/github.com/mailru/easyjson
-// replace github.com/masseelch/elk => ./patches/github.com/masseelch/elk
-replace github.com/masseelch/elk => /Volumes/Project/go-workspace/src/elk/
+// replace github.com/masseelch/elk => /Volumes/Project/go-workspace/src/elk/
