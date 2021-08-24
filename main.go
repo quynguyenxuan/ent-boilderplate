@@ -43,8 +43,7 @@ import (
 )
 
 type HTTPError struct {
-	Code    int    `json:"code" example:"400"`
-	Message string `json:"message" example:"status bad request"`
+	fiber.Error
 }
 
 // @title Fiber API
@@ -52,7 +51,7 @@ type HTTPError struct {
 // @description This is a sample swagger for Fiber
 // @termsOfService http://swagger.io/terms/
 // @contact.name API Support
-// @contact.email fiber@swagger.io
+// @contact.email quynguyen@swagger.io
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 // @host localhost:8081
