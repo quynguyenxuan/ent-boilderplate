@@ -18,9 +18,6 @@ require (
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/klauspost/compress v1.13.4 // indirect
 	github.com/lib/pq v1.10.2
-	github.com/mailru/easyjson v0.7.7
-	github.com/masseelch/elk v0.3.2
-	github.com/masseelch/render v1.0.4
 	github.com/mattn/go-sqlite3 v1.14.8
 	github.com/stretchr/testify v1.7.0
 	github.com/swaggo/swag v1.7.1

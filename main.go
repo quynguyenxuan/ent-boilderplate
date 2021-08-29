@@ -38,7 +38,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 
 	_ "entgo.io/quynguyen-todo/docs"
-	elk "entgo.io/quynguyen-todo/ent/http"
+	// elk "entgo.io/quynguyen-todo/ent/http"
 	swagger "github.com/arsmn/fiber-swagger/v2"
 )
 
@@ -98,13 +98,13 @@ func main() {
 		return nil
 	})
 
-	api := app.Group("/api")
+	// api := app.Group("/api")
 
-	productsRouter := api.Group("/product")
-	elk.NewProductHandler(client, log).Mount(productsRouter, elk.ProductRoutes)
+	// productsRouter := api.Group("/product")
+	// elk.NewProductHandler(client, log).Mount(productsRouter, elk.ProductRoutes)
 
-	todosRouter := api.Group("/todo")
-	elk.NewProductHandler(client, log).Mount(todosRouter, elk.TodoRoutes)
+	// todosRouter := api.Group("/todo")
+	// elk.NewProductHandler(client, log).Mount(todosRouter, elk.TodoRoutes)
 
 	app.All("/playground", func(c *fiber.Ctx) error {
 		ctx := c.Context()
