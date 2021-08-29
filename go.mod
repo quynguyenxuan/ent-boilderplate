@@ -18,6 +18,7 @@ require (
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/klauspost/compress v1.13.4 // indirect
 	github.com/lib/pq v1.10.2
+	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mattn/go-sqlite3 v1.14.8
 	github.com/stretchr/testify v1.7.0
 	github.com/swaggo/swag v1.7.1
@@ -30,4 +31,5 @@ require (
 	golang.org/x/sys v0.0.0-20210809222454-d867a43fc93e // indirect
 	golang.org/x/text v0.3.7 // indirect
 )
+
 // replace github.com/masseelch/elk => /Volumes/Project/go-workspace/src/elk/

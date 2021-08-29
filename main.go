@@ -91,7 +91,6 @@ func main() {
 	app := fiber.New()
 
 	app.All("/graphql", func(c *fiber.Ctx) error {
-		// var r http.Request
 		ctx := c.Context()
 		fasthttpH := fasthttpadaptor.NewFastHTTPHandlerFunc(srv.ServeHTTP)
 		fasthttpH(ctx)
