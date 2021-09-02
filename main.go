@@ -20,6 +20,7 @@ import (
 
 	// "entgo.io/quynguyen-todo"
 	"entgo.io/contrib/entgql"
+	"entgo.io/quynguyen-todo/api"
 	"entgo.io/quynguyen-todo/ent"
 	"entgo.io/quynguyen-todo/ent/migrate"
 
@@ -31,15 +32,18 @@ import (
 	"go.uber.org/zap"
 
 	_ "entgo.io/quynguyen-todo/ent/runtime"
-	"github.com/valyala/fasthttp/fasthttpadaptor"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
 
 	_ "entgo.io/quynguyen-todo/docs"
 	// elk "entgo.io/quynguyen-todo/ent/http"
 	swagger "github.com/arsmn/fiber-swagger/v2"
+	"github.com/gofiber/adaptor/v2"
+	jwtware "github.com/gofiber/jwt/v3"
+	"github.com/golang-jwt/jwt/v4"
 )
 
 type HTTPError struct {
@@ -88,29 +92,42 @@ func main() {
 	if cli.Debug {
 		srv.Use(&debug.Tracer{})
 	}
+
+	privateKey := api.GenerateKey()
+
 	app := fiber.New()
 
-	app.All("/graphql", func(c *fiber.Ctx) error {
-		ctx := c.Context()
-		fasthttpH := fasthttpadaptor.NewFastHTTPHandlerFunc(srv.ServeHTTP)
-		fasthttpH(ctx)
-		return nil
+	app.Use(cors.New(cors.Config{
+		AllowOrigins: "*",
+		AllowMethods: "GET,POST,HEAD,PUT,DELETE,PATCH",
+		AllowHeaders: "Origin, Content-Type, Accept, Authorization",
+	}))
+
+	app.All("/graphql", adaptor.HTTPHandlerFunc(srv.ServeHTTP))
+	app.All("/playground", adaptor.HTTPHandlerFunc(playground.Handler("Todo", "/graphql")))
+
+	apiGroup := app.Group("/api")
+	userGroup := apiGroup.Group("/user")
+	userGroup.Use(jwtware.New(jwtware.Config{
+		// SigningKey: []byte("secret"),
+		SigningMethod: "RS256",
+		SigningKey:    privateKey.Public(),
+	}))
+	apiHandle := api.NewHandler(client, log)
+	apiGroup.Post("/login", apiHandle.Login)
+	userGroup.Get("/", func(c *fiber.Ctx) error {
+		user := c.Locals("user").(*jwt.Token)
+		claims := user.Claims.(jwt.MapClaims)
+		// name := claims["name"].(string)
+		return c.JSON(claims)
+		// return c.SendString("Welcome " + name)
 	})
-
-	// api := app.Group("/api")
-
+	// api.NewHandler(client, log).Mount(apiGroup)
 	// productsRouter := api.Group("/product")
 	// elk.NewProductHandler(client, log).Mount(productsRouter, elk.ProductRoutes)
 
 	// todosRouter := api.Group("/todo")
 	// elk.NewProductHandler(client, log).Mount(todosRouter, elk.TodoRoutes)
-
-	app.All("/playground", func(c *fiber.Ctx) error {
-		ctx := c.Context()
-		fasthttpH := fasthttpadaptor.NewFastHTTPHandlerFunc(playground.Handler("Todo", "/graphql"))
-		fasthttpH(ctx)
-		return nil
-	})
 
 	app.Get("/swagger/*", swagger.Handler) // default
 
