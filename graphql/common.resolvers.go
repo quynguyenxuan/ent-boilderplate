@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"entgo.io/quynguyen-todo/ent"
-	"entgo.io/quynguyen-todo/ent/todo"
 )
 
 func (r *mutationResolver) CreateTodo(ctx context.Context, todo TodoInput) (*ent.Todo, error) {
@@ -33,7 +32,6 @@ func (r *mutationResolver) ClearTodos(ctx context.Context) (int, error) {
 
 func (r *mutationResolver) CreateProduct(ctx context.Context, product ProductInput) (*ent.Product, error) {
 	client := ent.FromContext(ctx)
-	client.Todo.Create().SetStatus(todo.StatusCompleted).SetText(product.Text).SetNillablePriority(product.Priority).SetCreatedAt(time.Now()).Save(ctx)
 	return client.Product.
 		Create().
 		SetStatus(product.Status).
@@ -48,6 +46,20 @@ func (r *mutationResolver) ClearProducts(ctx context.Context) (int, error) {
 	client := ent.FromContext(ctx)
 	return client.Product.Delete().Exec(ctx)
 	// panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) CreateUser(ctx context.Context, user UserInput) (*ent.User, error) {
+	client := ent.FromContext(ctx)
+	return client.User.
+		Create().
+		SetStatus(user.Status).
+		SetCreatedAt(time.Now()).
+		SetUpdatedAt(time.Now()).
+		SetName(user.Name).
+		SetEmail(user.Email).
+		SetProviderID(user.ProviderID).
+		SetProviderName(user.ProviderName).
+		Save(ctx)
 }
 
 func (r *queryResolver) Node(ctx context.Context, id int) (ent.Noder, error) {

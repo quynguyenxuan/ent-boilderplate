@@ -87,6 +87,26 @@ var (
 			},
 		},
 	}
+	// UsersColumns holds the columns for the "users" table.
+	UsersColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"ACTIVED", "INACTIVED"}},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "name", Type: field.TypeString},
+		{Name: "email", Type: field.TypeString},
+		{Name: "password", Type: field.TypeString},
+		{Name: "refresh_token", Type: field.TypeString},
+		{Name: "provider_id", Type: field.TypeString},
+		{Name: "provider_name", Type: field.TypeString},
+		{Name: "role", Type: field.TypeString, Default: "user"},
+	}
+	// UsersTable holds the schema information for the "users" table.
+	UsersTable = &schema.Table{
+		Name:       "users",
+		Columns:    UsersColumns,
+		PrimaryKey: []*schema.Column{UsersColumns[0]},
+	}
 	// VerySecretsColumns holds the columns for the "very_secrets" table.
 	VerySecretsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -103,6 +123,7 @@ var (
 		CategoriesTable,
 		ProductsTable,
 		TodosTable,
+		UsersTable,
 		VerySecretsTable,
 	}
 )

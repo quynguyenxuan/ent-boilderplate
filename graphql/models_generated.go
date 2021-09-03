@@ -7,6 +7,7 @@ import (
 
 	"entgo.io/quynguyen-todo/ent/product"
 	"entgo.io/quynguyen-todo/ent/todo"
+	"entgo.io/quynguyen-todo/ent/user"
 )
 
 type ProductInput struct {
@@ -23,4 +24,12 @@ type TodoInput struct {
 	Text       string      `json:"text"`
 	Parent     *int        `json:"parent"`
 	CategoryID *int        `json:"category_id"`
+}
+
+type UserInput struct {
+	Status       user.Status `json:"status"`
+	Name         string      `json:"name"`
+	Email        string      `json:"email"`
+	ProviderName string      `json:"provider_name"`
+	ProviderID   string      `json:"provider_id"`
 }

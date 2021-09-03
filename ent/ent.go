@@ -25,6 +25,7 @@ import (
 	"entgo.io/quynguyen-todo/ent/category"
 	"entgo.io/quynguyen-todo/ent/product"
 	"entgo.io/quynguyen-todo/ent/todo"
+	"entgo.io/quynguyen-todo/ent/user"
 	"entgo.io/quynguyen-todo/ent/verysecret"
 )
 
@@ -49,6 +50,7 @@ func columnChecker(table string) func(string) error {
 		category.Table:   category.ValidColumn,
 		product.Table:    product.ValidColumn,
 		todo.Table:       todo.ValidColumn,
+		user.Table:       user.ValidColumn,
 		verysecret.Table: verysecret.ValidColumn,
 	}
 	check, ok := checks[table]

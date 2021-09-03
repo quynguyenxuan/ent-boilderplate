@@ -1,0 +1,26 @@
+enum UserStatus {
+  ACTIVED
+  INACTIVED
+}
+
+type User implements Node {
+  id: ID!
+  created_at: Time
+  updated_at: Time
+  name: String
+  status: UserStatus!
+  email: String!
+  password: String!
+  refresh_token: String!
+  provider_id: String!
+  provider_name: String!
+  role: String!
+}
+
+input UserInput {
+  status: UserStatus! = IN_PROGRESS
+  name: String!
+  email: String!
+  provider_name: String!
+  provider_id: String!
+}

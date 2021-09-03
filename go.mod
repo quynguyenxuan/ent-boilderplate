@@ -4,7 +4,7 @@ go 1.16
 
 require (
 	entgo.io/contrib v0.0.0-20210709131656-a2b04157b717
-	entgo.io/ent v0.9.0
+	entgo.io/ent v0.9.1
 	github.com/99designs/gqlgen v0.13.0
 	github.com/AlekSi/pointer v1.1.0
 	github.com/alecthomas/kong v0.2.11
@@ -14,10 +14,10 @@ require (
 	github.com/go-chi/chi/v5 v5.0.3
 	github.com/go-openapi/jsonreference v0.19.6 // indirect
 	github.com/go-openapi/swag v0.19.15 // indirect
-	github.com/gofiber/adaptor/v2 v2.1.11 // indirect
+	github.com/gofiber/adaptor/v2 v2.1.11
 	github.com/gofiber/fiber/v2 v2.18.0
-	github.com/gofiber/jwt/v3 v3.0.2 // indirect
-	github.com/golang-jwt/jwt/v4 v4.0.0 // indirect
+	github.com/gofiber/jwt/v3 v3.0.2
+	github.com/golang-jwt/jwt/v4 v4.0.0
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/klauspost/compress v1.13.4 // indirect
 	github.com/lib/pq v1.10.2
