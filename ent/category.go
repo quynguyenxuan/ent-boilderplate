@@ -36,27 +36,6 @@ type Category struct {
 	Status category.Status `json:"status,omitempty"`
 	// Config holds the value of the "config" field.
 	Config *schematype.CategoryConfig `json:"config,omitempty"`
-	// Edges holds the relations/edges for other nodes in the graph.
-	// The values are being populated by the CategoryQuery when eager-loading is set.
-	Edges CategoryEdges `json:"edges"`
-}
-
-// CategoryEdges holds the relations/edges for other nodes in the graph.
-type CategoryEdges struct {
-	// Todos holds the value of the todos edge.
-	Todos []*Todo `json:"todos,omitempty"`
-	// loadedTypes holds the information for reporting if a
-	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
-}
-
-// TodosOrErr returns the Todos value or an error if the edge
-// was not loaded in eager-loading.
-func (e CategoryEdges) TodosOrErr() ([]*Todo, error) {
-	if e.loadedTypes[0] {
-		return e.Todos, nil
-	}
-	return nil, &NotLoadedError{edge: "todos"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -112,11 +91,6 @@ func (c *Category) assignValues(columns []string, values []interface{}) error {
 		}
 	}
 	return nil
-}
-
-// QueryTodos queries the "todos" edge of the Category entity.
-func (c *Category) QueryTodos() *TodoQuery {
-	return (&CategoryClient{config: c.config}).QueryTodos(c)
 }
 
 // Update returns a builder for updating this Category.

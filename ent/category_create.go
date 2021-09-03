@@ -25,7 +25,6 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/quynguyen-todo/ent/category"
 	"entgo.io/quynguyen-todo/ent/schema/schematype"
-	"entgo.io/quynguyen-todo/ent/todo"
 )
 
 // CategoryCreate is the builder for creating a Category entity.
@@ -51,21 +50,6 @@ func (cc *CategoryCreate) SetStatus(c category.Status) *CategoryCreate {
 func (cc *CategoryCreate) SetConfig(sc *schematype.CategoryConfig) *CategoryCreate {
 	cc.mutation.SetConfig(sc)
 	return cc
-}
-
-// AddTodoIDs adds the "todos" edge to the Todo entity by IDs.
-func (cc *CategoryCreate) AddTodoIDs(ids ...int) *CategoryCreate {
-	cc.mutation.AddTodoIDs(ids...)
-	return cc
-}
-
-// AddTodos adds the "todos" edges to the Todo entity.
-func (cc *CategoryCreate) AddTodos(t ...*Todo) *CategoryCreate {
-	ids := make([]int, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
-	}
-	return cc.AddTodoIDs(ids...)
 }
 
 // Mutation returns the CategoryMutation object of the builder.
@@ -204,25 +188,6 @@ func (cc *CategoryCreate) createSpec() (*Category, *sqlgraph.CreateSpec) {
 			Column: category.FieldConfig,
 		})
 		_node.Config = value
-	}
-	if nodes := cc.mutation.TodosIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   category.TodosTable,
-			Columns: []string{category.TodosColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: todo.FieldID,
-				},
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

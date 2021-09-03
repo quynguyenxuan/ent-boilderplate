@@ -20,7 +20,6 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
-	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 )
 
@@ -52,7 +51,8 @@ func (Category) Fields() []ent.Field {
 
 // Edges of the Category.
 func (Category) Edges() []ent.Edge {
-	return []ent.Edge{
-		edge.To("todos", Todo.Type),
-	}
+	return nil
+	// return []ent.Edge{
+	// 	edge.To("todos", Todo.Type),
+	// }
 }

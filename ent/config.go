@@ -40,7 +40,6 @@ type config struct {
 type hooks struct {
 	Category   []ent.Hook
 	Product    []ent.Hook
-	Todo       []ent.Hook
 	User       []ent.Hook
 	VerySecret []ent.Hook
 }

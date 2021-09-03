@@ -5,8 +5,14 @@ enum ProductStatus {
 
 type Product implements Node {
   id: ID!
-  createdAt: Time
+  created_at: Time
+  updated_at: Time
   status: ProductStatus!
+  category: String!
+  category_display_name: String!
+  description: String!
+  name: String!
+  price: Float!
   priority: Int!
   text: String!
 }

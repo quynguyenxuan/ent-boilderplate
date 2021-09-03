@@ -49,44 +49,6 @@ var (
 		Columns:    ProductsColumns,
 		PrimaryKey: []*schema.Column{ProductsColumns[0]},
 	}
-	// TodosColumns holds the columns for the "todos" table.
-	TodosColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "created_at", Type: field.TypeTime},
-		{Name: "status", Type: field.TypeEnum, Enums: []string{"IN_PROGRESS", "COMPLETED"}},
-		{Name: "priority", Type: field.TypeInt, Default: 0},
-		{Name: "text", Type: field.TypeString, Size: 2147483647},
-		{Name: "blob", Type: field.TypeBytes, Nullable: true},
-		{Name: "category_todos", Type: field.TypeInt, Nullable: true},
-		{Name: "todo_children", Type: field.TypeInt, Nullable: true},
-		{Name: "todo_secret", Type: field.TypeInt, Nullable: true},
-	}
-	// TodosTable holds the schema information for the "todos" table.
-	TodosTable = &schema.Table{
-		Name:       "todos",
-		Columns:    TodosColumns,
-		PrimaryKey: []*schema.Column{TodosColumns[0]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "todos_categories_todos",
-				Columns:    []*schema.Column{TodosColumns[6]},
-				RefColumns: []*schema.Column{CategoriesColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "todos_todos_children",
-				Columns:    []*schema.Column{TodosColumns[7]},
-				RefColumns: []*schema.Column{TodosColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "todos_very_secrets_secret",
-				Columns:    []*schema.Column{TodosColumns[8]},
-				RefColumns: []*schema.Column{VerySecretsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-		},
-	}
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
@@ -122,14 +84,10 @@ var (
 	Tables = []*schema.Table{
 		CategoriesTable,
 		ProductsTable,
-		TodosTable,
 		UsersTable,
 		VerySecretsTable,
 	}
 )
 
 func init() {
-	TodosTable.ForeignKeys[0].RefTable = CategoriesTable
-	TodosTable.ForeignKeys[1].RefTable = TodosTable
-	TodosTable.ForeignKeys[2].RefTable = VerySecretsTable
 }

@@ -30,13 +30,10 @@ directive @goField(
 type Query {
   node(id: ID!): Node
   nodes(ids: [ID!]!): [Node]!
-  todos(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: TodoOrder, where: TodoWhereInput): TodoConnection
   products(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: ProductOrder, where: ProductWhereInput): ProductConnection
 }
 
 type Mutation {
-  createTodo(todo: TodoInput!): Todo!
-  clearTodos: Int!
   createProduct(product: ProductInput!): Product!
   clearProducts: Int!
   createUser(user: UserInput!): User!

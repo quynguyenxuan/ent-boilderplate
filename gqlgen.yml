@@ -20,7 +20,7 @@ autobind:
   # Auto-bind the generated `Status` enum to GraphQL.
   - entgo.io/quynguyen-todo/ent/user
   - entgo.io/quynguyen-todo/ent/category
-  - entgo.io/quynguyen-todo/ent/todo
+  # - entgo.io/quynguyen-todo/ent/todo
   - entgo.io/quynguyen-todo/ent/product
 
 models:
@@ -36,9 +36,9 @@ models:
     model:
       - entgo.io/quynguyen-todo/ent/product.Status
 
-  TodoStatus:
-    model:
-      - entgo.io/quynguyen-todo/ent/todo.Status
+  # TodoStatus:
+  #   model:
+  #     - entgo.io/quynguyen-todo/ent/todo.Status
       
   UserStatus:
     model:

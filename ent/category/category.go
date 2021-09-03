@@ -33,17 +33,8 @@ const (
 	FieldStatus = "status"
 	// FieldConfig holds the string denoting the config field in the database.
 	FieldConfig = "config"
-	// EdgeTodos holds the string denoting the todos edge name in mutations.
-	EdgeTodos = "todos"
 	// Table holds the table name of the category in the database.
 	Table = "categories"
-	// TodosTable is the table that holds the todos relation/edge.
-	TodosTable = "todos"
-	// TodosInverseTable is the table name for the Todo entity.
-	// It exists in this package in order to avoid circular dependency with the "todo" package.
-	TodosInverseTable = "todos"
-	// TodosColumn is the table column denoting the todos relation/edge.
-	TodosColumn = "category_todos"
 )
 
 // Columns holds all SQL columns for category fields.

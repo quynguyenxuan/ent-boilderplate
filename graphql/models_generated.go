@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"entgo.io/quynguyen-todo/ent/product"
-	"entgo.io/quynguyen-todo/ent/todo"
 	"entgo.io/quynguyen-todo/ent/user"
 )
 
@@ -15,15 +14,6 @@ type ProductInput struct {
 	CreatedAt *time.Time     `json:"createdAt"`
 	Priority  *int           `json:"priority"`
 	Text      string         `json:"text"`
-}
-
-type TodoInput struct {
-	Status     todo.Status `json:"status"`
-	CreatedAt  *time.Time  `json:"createdAt"`
-	Priority   *int        `json:"priority"`
-	Text       string      `json:"text"`
-	Parent     *int        `json:"parent"`
-	CategoryID *int        `json:"category_id"`
 }
 
 type UserInput struct {

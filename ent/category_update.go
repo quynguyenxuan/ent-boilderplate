@@ -26,7 +26,6 @@ import (
 	"entgo.io/quynguyen-todo/ent/category"
 	"entgo.io/quynguyen-todo/ent/predicate"
 	"entgo.io/quynguyen-todo/ent/schema/schematype"
-	"entgo.io/quynguyen-todo/ent/todo"
 )
 
 // CategoryUpdate is the builder for updating Category entities.
@@ -66,45 +65,9 @@ func (cu *CategoryUpdate) ClearConfig() *CategoryUpdate {
 	return cu
 }
 
-// AddTodoIDs adds the "todos" edge to the Todo entity by IDs.
-func (cu *CategoryUpdate) AddTodoIDs(ids ...int) *CategoryUpdate {
-	cu.mutation.AddTodoIDs(ids...)
-	return cu
-}
-
-// AddTodos adds the "todos" edges to the Todo entity.
-func (cu *CategoryUpdate) AddTodos(t ...*Todo) *CategoryUpdate {
-	ids := make([]int, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
-	}
-	return cu.AddTodoIDs(ids...)
-}
-
 // Mutation returns the CategoryMutation object of the builder.
 func (cu *CategoryUpdate) Mutation() *CategoryMutation {
 	return cu.mutation
-}
-
-// ClearTodos clears all "todos" edges to the Todo entity.
-func (cu *CategoryUpdate) ClearTodos() *CategoryUpdate {
-	cu.mutation.ClearTodos()
-	return cu
-}
-
-// RemoveTodoIDs removes the "todos" edge to Todo entities by IDs.
-func (cu *CategoryUpdate) RemoveTodoIDs(ids ...int) *CategoryUpdate {
-	cu.mutation.RemoveTodoIDs(ids...)
-	return cu
-}
-
-// RemoveTodos removes "todos" edges to Todo entities.
-func (cu *CategoryUpdate) RemoveTodos(t ...*Todo) *CategoryUpdate {
-	ids := make([]int, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
-	}
-	return cu.RemoveTodoIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -227,60 +190,6 @@ func (cu *CategoryUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: category.FieldConfig,
 		})
 	}
-	if cu.mutation.TodosCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   category.TodosTable,
-			Columns: []string{category.TodosColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: todo.FieldID,
-				},
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := cu.mutation.RemovedTodosIDs(); len(nodes) > 0 && !cu.mutation.TodosCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   category.TodosTable,
-			Columns: []string{category.TodosColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: todo.FieldID,
-				},
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := cu.mutation.TodosIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   category.TodosTable,
-			Columns: []string{category.TodosColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: todo.FieldID,
-				},
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	if n, err = sqlgraph.UpdateNodes(ctx, cu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{category.Label}
@@ -324,45 +233,9 @@ func (cuo *CategoryUpdateOne) ClearConfig() *CategoryUpdateOne {
 	return cuo
 }
 
-// AddTodoIDs adds the "todos" edge to the Todo entity by IDs.
-func (cuo *CategoryUpdateOne) AddTodoIDs(ids ...int) *CategoryUpdateOne {
-	cuo.mutation.AddTodoIDs(ids...)
-	return cuo
-}
-
-// AddTodos adds the "todos" edges to the Todo entity.
-func (cuo *CategoryUpdateOne) AddTodos(t ...*Todo) *CategoryUpdateOne {
-	ids := make([]int, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
-	}
-	return cuo.AddTodoIDs(ids...)
-}
-
 // Mutation returns the CategoryMutation object of the builder.
 func (cuo *CategoryUpdateOne) Mutation() *CategoryMutation {
 	return cuo.mutation
-}
-
-// ClearTodos clears all "todos" edges to the Todo entity.
-func (cuo *CategoryUpdateOne) ClearTodos() *CategoryUpdateOne {
-	cuo.mutation.ClearTodos()
-	return cuo
-}
-
-// RemoveTodoIDs removes the "todos" edge to Todo entities by IDs.
-func (cuo *CategoryUpdateOne) RemoveTodoIDs(ids ...int) *CategoryUpdateOne {
-	cuo.mutation.RemoveTodoIDs(ids...)
-	return cuo
-}
-
-// RemoveTodos removes "todos" edges to Todo entities.
-func (cuo *CategoryUpdateOne) RemoveTodos(t ...*Todo) *CategoryUpdateOne {
-	ids := make([]int, len(t))
-	for i := range t {
-		ids[i] = t[i].ID
-	}
-	return cuo.RemoveTodoIDs(ids...)
 }
 
 // Select allows selecting one or more fields (columns) of the returned entity.
@@ -508,60 +381,6 @@ func (cuo *CategoryUpdateOne) sqlSave(ctx context.Context) (_node *Category, err
 			Type:   field.TypeOther,
 			Column: category.FieldConfig,
 		})
-	}
-	if cuo.mutation.TodosCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   category.TodosTable,
-			Columns: []string{category.TodosColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: todo.FieldID,
-				},
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := cuo.mutation.RemovedTodosIDs(); len(nodes) > 0 && !cuo.mutation.TodosCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   category.TodosTable,
-			Columns: []string{category.TodosColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: todo.FieldID,
-				},
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := cuo.mutation.TodosIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   category.TodosTable,
-			Columns: []string{category.TodosColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: &sqlgraph.FieldSpec{
-					Type:   field.TypeInt,
-					Column: todo.FieldID,
-				},
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &Category{config: cuo.config}
 	_spec.Assign = _node.assignValues

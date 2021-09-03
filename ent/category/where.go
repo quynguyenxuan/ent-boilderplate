@@ -18,7 +18,6 @@ package category
 
 import (
 	"entgo.io/ent/dialect/sql"
-	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/quynguyen-todo/ent/predicate"
 	"entgo.io/quynguyen-todo/ent/schema/schematype"
 )
@@ -366,34 +365,6 @@ func ConfigIsNil() predicate.Category {
 func ConfigNotNil() predicate.Category {
 	return predicate.Category(func(s *sql.Selector) {
 		s.Where(sql.NotNull(s.C(FieldConfig)))
-	})
-}
-
-// HasTodos applies the HasEdge predicate on the "todos" edge.
-func HasTodos() predicate.Category {
-	return predicate.Category(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(TodosTable, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, TodosTable, TodosColumn),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasTodosWith applies the HasEdge predicate on the "todos" edge with a given conditions (other predicates).
-func HasTodosWith(preds ...predicate.Todo) predicate.Category {
-	return predicate.Category(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.To(TodosInverseTable, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, TodosTable, TodosColumn),
-		)
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
 	})
 }
 
