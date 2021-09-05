@@ -1,0 +1,8 @@
+{{ define "client_get" }}
+
+{{ $pkg := base $.Config.Package }}
+    {{ template "header" $ }}
+    func (c *Client) Driver() dialect.Driver {
+        return c.config.driver
+    }
+{{ end }}

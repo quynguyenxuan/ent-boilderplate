@@ -7,11 +7,16 @@ import (
 	"context"
 	"time"
 
+	// "entgo.io/ent/dialect/sql"
 	"entgo.io/quynguyen-todo/ent"
 )
 
 func (r *mutationResolver) CreateProduct(ctx context.Context, product ProductInput) (*ent.Product, error) {
 	client := ent.FromContext(ctx)
+	// client.
+	// client.Product.Query().Select("*").Where(sql.EQ("name", "12"))
+	//custom sql dialect/sql/sqlgraph/graph_test.go
+	// sql.Dialect(client.Driver().Dialect()).Select("*").From(sql.Table("users").Schema("s1"))
 	return client.Product.
 		Create().
 		SetStatus(product.Status).

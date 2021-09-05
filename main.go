@@ -14,15 +14,12 @@
 package main
 
 import (
-	"context"
-
 	todo "entgo.io/quynguyen-todo/graphql"
 
 	// "entgo.io/quynguyen-todo"
 	"entgo.io/contrib/entgql"
 	"entgo.io/quynguyen-todo/api"
 	"entgo.io/quynguyen-todo/ent"
-	"entgo.io/quynguyen-todo/ent/migrate"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/debug"
@@ -80,12 +77,13 @@ func main() {
 	if err != nil {
 		log.Fatal("opening ent client", zap.Error(err))
 	}
-	if err := client.Schema.Create(
-		context.Background(),
-		migrate.WithGlobalUniqueID(true),
-	); err != nil {
-		log.Fatal("running schema migration", zap.Error(err))
-	}
+	//auto migrate
+	// if err := client.Schema.Create(
+	// 	context.Background(),
+	// 	migrate.WithGlobalUniqueID(true),
+	// ); err != nil {
+	// 	log.Fatal("running schema migration", zap.Error(err))
+	// }
 
 	srv := handler.NewDefaultServer(todo.NewSchema(client))
 	srv.Use(entgql.Transactioner{TxOpener: client})
