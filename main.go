@@ -18,17 +18,16 @@ import (
 
 	// "entgo.io/quynguyen-todo"
 	"entgo.io/contrib/entgql"
-	"entgo.io/quynguyen-todo/api"
 	"entgo.io/quynguyen-todo/ent"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/handler/debug"
 
+	_ "entgo.io/quynguyen-todo/ent/runtime"
+	controllers "entgo.io/quynguyen-todo/rest/controllers"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/alecthomas/kong"
 	"go.uber.org/zap"
-
-	_ "entgo.io/quynguyen-todo/ent/runtime"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -61,6 +60,7 @@ func main() {
 	var cli struct {
 		Addr  string `name:"address" default:":8081" help:"Address to listen on."`
 		Debug bool   `name:"debug" help:"Enable debugging mode."`
+		Prod  bool   `name:"prod" default:"false" help:"Enable prefork in Production"`
 	}
 	kong.Parse(&cli)
 
@@ -74,6 +74,7 @@ func main() {
 		// "file:ent?mode=memory&cache=shared&_fk=1",
 		"file:sqlite.db?cache=shared&_fk=1",
 	)
+	// postgresql://localhost:5432/postgres?user=postgres&password=postgrespassword&sslmode=disable
 	if err != nil {
 		log.Fatal("opening ent client", zap.Error(err))
 	}
@@ -91,9 +92,11 @@ func main() {
 		srv.Use(&debug.Tracer{})
 	}
 
-	privateKey := api.GenerateKey()
+	privateKey := controllers.GenerateKey()
 
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+		Prefork: cli.Prod, // go run app.go -prod
+	})
 
 	app.Use(cors.New(cors.Config{
 		AllowOrigins: "*",
@@ -111,8 +114,8 @@ func main() {
 		SigningMethod: "RS256",
 		SigningKey:    privateKey.Public(),
 	}))
-	apiHandle := api.NewHandler(client, log)
-	apiGroup.Post("/login", apiHandle.Login)
+	// apiHandle := controllers.NewHandler(client, log)
+	apiGroup.Post("/login", controllers.Login)
 	userGroup.Get("/", func(c *fiber.Ctx) error {
 		user := c.Locals("user").(*jwt.Token)
 		claims := user.Claims.(jwt.MapClaims)
@@ -142,6 +145,7 @@ func main() {
 		// Ability to change OAuth2 redirect uri location
 		OAuth2RedirectUrl: "http://localhost:8081/swagger/oauth2-redirect.html",
 	}))
+	// app.Static("/static", "./static/public")
 
 	app.Listen(cli.Addr)
 

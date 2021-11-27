@@ -9,6 +9,8 @@ gen-doc:
 	swag init
 get-schema:
 	gq http://localhost:8060/v1/graphql --introspect > schema.graphql
+diagram: 
+	enter ./ent/schema
 air:
 	air
 serve:

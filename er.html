@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+</head>
+<body>
+		<div class="mermaid" id="er-diagram">
+erDiagram
+    Category {
+        int id
+        string text
+        categoryDOTStatus status
+        STARschematypeDOTCategoryConfig config
+    }
+    Product {
+        int id
+        timeDOTTime created_at
+        productDOTStatus status
+        int priority
+        string text
+    }
+    User {
+        int id
+        userDOTStatus status
+        timeDOTTime created_at
+        timeDOTTime updated_at
+        string name
+        string email
+        string password
+        string refresh_token
+        string provider_id
+        string provider_name
+        string role
+    }
+    VerySecret {
+        int id
+        string password
+    }
+		</div>
+	<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+	<script>
+		mermaid.mermaidAPI.initialize({
+			startOnLoad: true,
+		});
+		var observer = new MutationObserver((event) => {
+			document.querySelectorAll('text[id^=entity]').forEach(text => {
+				text.textContent = text.textContent.replace('DOT', '.');
+				text.textContent = text.textContent.replace('STAR', '*');
+				text.textContent = text.textContent.replace('LBRACK', '[');
+				text.textContent = text.textContent.replace('RBRACK', ']');
+			});
+			observer.disconnect();
+		});
+		observer.observe(document.getElementById('er-diagram'), { attributes: true, childList: true });
+	</script>
+</body>
+</html>

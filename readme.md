@@ -13,3 +13,5 @@ ent/schema
 ent/entc.go
 ent/generate.go
 graphql
+
+ngrok to publish local server
